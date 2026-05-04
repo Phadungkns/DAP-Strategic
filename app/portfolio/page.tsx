@@ -1,0 +1,30 @@
+import React from 'react';
+import PageHeader from '@/components/shared/PageHeader';
+import ProjectCard from '@/components/portfolio/ProjectCard';
+import PortfolioCTA from '@/components/portfolio/PortfolioCTA';
+import { projects } from '@/data/portfolio';
+
+export default function PortfolioPage() {
+  return (
+    <div className="bg-gray-50">
+      <PageHeader
+        badge="Our Track Record"
+        title="ผลงานและความสำเร็จ"
+        description="เราภูมิใจที่ได้เป็นส่วนหนึ่งในความสำเร็จของลูกค้า นี่คือส่วนหนึ่งของโครงการที่เราได้เข้าไปช่วยวิเคราะห์ วางกลยุทธ์ และผลักดันจนเกิดผลลัพธ์ที่จับต้องได้จริง"
+      />
+
+      {/* Portfolio Grid */}
+      <section className="py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <PortfolioCTA />
+    </div>
+  );
+}

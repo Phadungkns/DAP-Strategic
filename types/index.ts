@@ -1,0 +1,191 @@
+import { type LucideIcon } from 'lucide-react';
+
+/* ── Service Types ── */
+export interface ServiceItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  problem: string;
+  solution: string;
+  deliverables: string[];
+  pricing: string;
+}
+
+/* ── Sanity Service Type ── */
+export interface SanityService {
+  _id: string;
+  title: string;
+  subtitle?: string;
+  shortDescription?: string;
+  problem?: string;
+  solution?: string;
+  deliverables?: string[];
+  pricing?: string;
+  order?: number;
+}
+
+/* ── Portfolio Types ── */
+export interface PortfolioProject {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  result: string;
+  image: string;
+  icon: LucideIcon;
+}
+
+/* ── Sanity Portfolio Type ── */
+export interface SanityPortfolio {
+  _id: string;
+  title: string;
+  description: string;
+  result: string;
+  category?: string;   // มาจาก service->title
+  imageUrl?: string;    // มาจาก image.asset->url
+  order?: number;
+}
+
+/* ── Navigation Types ── */
+export interface NavItem {
+  href: string;
+  label: string;
+}
+
+/* ── Sanity CMS Types ── */
+export interface SiteSettings {
+  companyName: string;
+  logo?: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  contact?: {
+    email?: string;
+    phone?: string;
+    lineUrl?: string;
+    address?: string;
+  };
+  socialLinks?: Array<{
+    platform: 'facebook' | 'tiktok' | 'youtube';
+    url: string;
+  }>;
+  footerTagline?: string;
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+}
+
+/* ── Home Page Types (Sanity) ── */
+export interface HomePage {
+  hero?: {
+    badge?: string;
+    heading?: string;
+    highlight?: string;
+    description?: string;
+  };
+  valueProps?: Array<{
+    title: string;
+    description: string;
+  }>;
+  stats?: Array<{
+    value: string;
+    label: string;
+    subLabel?: string;
+  }>;
+  cta?: {
+    heading?: string;
+    description?: string;
+  };
+}
+
+/* ── Sanity Product Type ── */
+export interface SanityProduct {
+  _id: string;
+  title: string;
+  productType: 'ebook' | 'course' | 'template';
+  subtitle?: string;
+  description?: string;
+  features?: string[];
+  suitableFor?: string[];
+  originalPrice?: number;
+  salePrice: number;
+  badge?: 'bestseller' | 'recommended' | 'new' | 'none';
+  imageUrl?: string;
+  ctaLink?: string;
+  order?: number;
+  isActive?: boolean;
+}
+
+/* ── Products Page Type (Sanity) ── */
+export interface ProductsPageContent {
+  hero?: {
+    badge?: string;
+    heading?: string;
+    highlight?: string;
+    painPoints?: Array<{ text: string }>;
+  };
+  solution?: {
+    heading?: string;
+    description?: string;
+  };
+  benefitsSection?: {
+    benefits?: Array<{ title: string; description: string }>;
+  };
+  productsSection?: {
+    heading?: string;
+    subheading?: string;
+  };
+  cta?: {
+    heading?: string;
+    description?: string;
+  };
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+}
+
+/* ── Services Page Type (Sanity) ── */
+export interface ServicesPageContent {
+  hero?: {
+    badge?: string;
+    heading?: string;
+    description?: string;
+  };
+  cta?: {
+    heading?: string;
+    description?: string;
+  };
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+}
+
+/* ── About Page Type (Sanity) ── */
+export interface AboutPageContent {
+  story?: {
+    badge?: string;
+    heading?: string;
+    description?: string;
+    visionTitle?: string;
+    visionDescription?: string;
+    imageUrl?: string;
+    stats?: Array<{ value: string; label: string }>;
+  };
+  philosophy?: {
+    heading?: string;
+    items?: Array<{ title: string; description: string }>;
+  };
+  contact?: {
+    heading?: string;
+    subheading?: string;
+  };
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+}

@@ -1,0 +1,32 @@
+import React from 'react';
+import Link from 'next/link';
+import { MessageCircle } from 'lucide-react';
+import type { ProductsPageContent } from '@/types';
+
+interface ProductsCTAProps {
+  data: ProductsPageContent | null;
+}
+
+export default function ProductsCTA({ data }: ProductsCTAProps) {
+  return (
+    <section className="py-20 bg-blue-900 text-white text-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+        <h2 className="font-display text-3xl md:text-4xl font-bold mb-6">
+          {data?.cta?.heading || "ลงทุนในความรู้ คือการลงทุนที่คุ้มค่าที่สุด"}
+        </h2>
+        <p className="text-blue-200 text-lg mb-10 whitespace-pre-line">
+          {data?.cta?.description || "อย่าปล่อยให้ปัญหาเดิมๆ ฉุดรั้งการเติบโตของคุณ เริ่มต้นเปลี่ยนแปลงตั้งแต่วันนี้"}
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link href="#products" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-blue-900 bg-white rounded-full hover:bg-gray-50 transition-all shadow-xl">
+            เลือกซื้อสินค้า
+          </Link>
+          <Link href="https://line.me" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all">
+            <MessageCircle className="mr-2 w-5 h-5" />
+            สอบถามแอดมิน
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
