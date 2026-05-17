@@ -99,24 +99,63 @@ export interface HomePage {
     heading?: string;
     description?: string;
   };
+  seo?: {
+    title?: string;
+    description?: string;
+  };
 }
+
+/* ── Product Section Types ── */
+export interface ProductHeroSection {
+  _type: 'heroSection';
+  subheading?: string;
+  videoPreview?: string;
+  thumbnailUrl?: string;
+}
+
+export interface ProductStorySection {
+  _type: 'storySection';
+  heading?: string;
+  content?: SanityBlock[];
+  imageUrl?: string;
+}
+
+export interface ProductSocialProofSection {
+  _type: 'socialProofSection';
+  title?: string;
+  description?: string;
+  socialImages?: Array<{ url: string }>;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type SanityBlock = any;
+
+export type ProductSection = ProductHeroSection | ProductStorySection | ProductSocialProofSection;
 
 /* ── Sanity Product Type ── */
 export interface SanityProduct {
   _id: string;
   title: string;
-  productType: 'ebook' | 'course' | 'template';
+  slug?: { current: string };
+  category?: { title: string; slug?: { current: string } };
+  sections?: ProductSection[];
   subtitle?: string;
   description?: string;
   features?: string[];
   suitableFor?: string[];
   originalPrice?: number;
   salePrice: number;
+  bookingPrice?: number;
   badge?: 'bestseller' | 'recommended' | 'new' | 'none';
   imageUrl?: string;
   ctaLink?: string;
+  bookingLink?: string;
   order?: number;
   isActive?: boolean;
+  seo?: {
+    title?: string;
+    description?: string;
+  };
 }
 
 /* ── Products Page Type (Sanity) ── */

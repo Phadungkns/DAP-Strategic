@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import HeroSection from '@/components/home/HeroSection';
 import ValueProposition from '@/components/home/ValueProposition';
 import ServicesOverview from '@/components/home/ServicesOverview';
@@ -7,9 +8,28 @@ import PortfolioHighlight from '@/components/home/PortfolioHighlight';
 import HomeCTA from '@/components/home/HomeCTA';
 import { sanityClient } from '@/lib/sanity';
 import { homePageQuery, servicesQuery, portfolioQuery } from '@/lib/queries';
+import { generatePageMetadata } from '@/lib/seo';
 import type { HomePage, SanityService, SanityPortfolio } from '@/types';
 
-export default async function HomePage() {
+// ── SEO: Dynamic metadata from Sanity ──
+export async function generateMetadata(): Promise<Metadata> {
+  let data: HomePage | null = null;
+  try {
+    data = await sanityClient.fetch<HomePage>(homePageQuery);
+  } catch {
+    // fallback to defaults
+  }
+
+  return generatePageMetadata({
+    title: data?.seo?.title || 'DAP Strategic Consulting | ที่ปรึกษาธุรกิจเชิงกลยุทธ์',
+    description:
+      data?.seo?.description ||
+      'ที่ปรึกษาธุรกิจเชิงกลยุทธ์ ช่วยวิเคราะห์ วางแผน และผลักดันธุรกิจให้เติบโตอย่างยั่งยืนด้วยกลยุทธ์ที่วัดผลได้จริง',
+    path: '/',
+  });
+}
+
+export default async function HomePageView() {
   let data: HomePage | null = null;
   let services: SanityService[] = [];
   let portfolios: SanityPortfolio[] = [];

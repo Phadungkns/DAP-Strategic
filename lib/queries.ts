@@ -67,27 +67,73 @@ export const homePageQuery = `
     cta {
       heading,
       description
+    },
+    seo {
+      title,
+      description
     }
   }
 `;
 
-// ดึงข้อมูล products ที่ isActive = true เรียงตาม order
+// ดึงข้อมูล products ที่ isActive = true เรียงตาม order (listing)
 export const productsQuery = `
   *[_type == "product" && isActive == true] | order(order asc) {
     _id,
     title,
-    productType,
+    slug,
+    "category": category->{ title, slug },
+    subtitle,
+    description,
+    "imageUrl": image.asset->url,
+    badge,
+    order
+  }
+`;
+
+// ดึงข้อมูล product ตาม slug (หน้ารายละเอียด)
+export const productBySlugQuery = `
+  *[_type == "product" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    "category": category->{ title, slug },
+    sections[] {
+      _type,
+      _type == "heroSection" => {
+        subheading,
+        videoPreview,
+        "thumbnailUrl": thumbnail.asset->url
+      },
+      _type == "storySection" => {
+        heading,
+        content,
+        "imageUrl": image.asset->url
+      },
+      _type == "socialProofSection" => {
+        title,
+        description,
+        "socialImages": socialImages[]{ "url": asset->url }
+      }
+    },
     subtitle,
     description,
     features,
     suitableFor,
     originalPrice,
     salePrice,
+    bookingPrice,
     badge,
     "imageUrl": image.asset->url,
     ctaLink,
-    order
+    bookingLink,
+    isActive,
+    seo
   }
+`;
+
+// ดึง slug ทั้งหมดสำหรับ generateStaticParams
+export const productSlugsQuery = `
+  *[_type == "product" && isActive == true] { "slug": slug.current }
 `;
 
 // ดึงข้อมูล productsPage

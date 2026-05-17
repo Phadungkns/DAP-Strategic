@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import PageHeader from '@/components/shared/PageHeader';
 import ServiceCard from '@/components/services/ServiceCard';
 import ServicesCTA from '@/components/services/ServicesCTA';
@@ -6,9 +7,28 @@ import { sanityClient } from '@/lib/sanity';
 import { servicesQuery, servicesPageQuery } from '@/lib/queries';
 import { services as fallbackServices } from '@/data/services';
 import { slugify } from '@/lib/utils';
+import { generatePageMetadata } from '@/lib/seo';
 import type { SanityService, ServicesPageContent } from '@/types';
 
 export const revalidate = 3600; // revalidate ทุก 1 ชั่วโมง
+
+// ── SEO: Dynamic metadata from Sanity ──
+export async function generateMetadata(): Promise<Metadata> {
+  let pageData: ServicesPageContent | null = null;
+  try {
+    pageData = await sanityClient.fetch<ServicesPageContent>(servicesPageQuery);
+  } catch {
+    // fallback to defaults
+  }
+
+  return generatePageMetadata({
+    title: pageData?.seo?.title || 'บริการที่ปรึกษาธุรกิจ | DAP Strategic Consulting',
+    description:
+      pageData?.seo?.description ||
+      'บริการที่ปรึกษาด้านกลยุทธ์ธุรกิจ การวิเคราะห์ข้อมูล และการวางแผนเชิงกลยุทธ์เพื่อผลักดันธุรกิจให้เติบโต',
+    path: '/services',
+  });
+}
 
 export default async function ServicesPage() {
   // ดึงข้อมูลจาก Sanity

@@ -1,13 +1,33 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import AboutSection from '@/components/contact/AboutSection';
 import CorePhilosophy from '@/components/contact/CorePhilosophy';
 import ContactInfo from '@/components/contact/ContactInfo';
 import LeadForm from '@/components/contact/LeadForm';
 import { sanityClient } from '@/lib/sanity';
 import { siteSettingsQuery, aboutPageQuery } from '@/lib/queries';
+import { generatePageMetadata } from '@/lib/seo';
 import type { SiteSettings, AboutPageContent } from '@/types';
 
 export const revalidate = 3600;
+
+// ── SEO: Dynamic metadata from Sanity ──
+export async function generateMetadata(): Promise<Metadata> {
+  let pageData: AboutPageContent | null = null;
+  try {
+    pageData = await sanityClient.fetch<AboutPageContent>(aboutPageQuery);
+  } catch {
+    // fallback to defaults
+  }
+
+  return generatePageMetadata({
+    title: pageData?.seo?.title || 'ติดต่อเรา | DAP Strategic Consulting',
+    description:
+      pageData?.seo?.description ||
+      'ปรึกษาธุรกิจเบื้องต้นฟรี ติดต่อทีม DAP Strategic Consulting เพื่อยกระดับธุรกิจของคุณ',
+    path: '/contact',
+  });
+}
 
 export default async function ContactPage() {
   let siteSettings: SiteSettings | null = null;
