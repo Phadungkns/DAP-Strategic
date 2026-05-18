@@ -166,7 +166,7 @@ export default async function ProductDetailPage({
                 href={product.bookingLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 text-center px-3 py-3 text-sm font-semibold text-blue-600 border border-blue-200 rounded-xl hover:bg-blue-50 transition-colors"
+                className="flex-1 text-center px-3 py-3 text-sm font-semibold text-blue-900 border-2 border-blue-900 rounded-full hover:bg-blue-50 transition-colors"
               >
                 จอง
               </Link>
@@ -176,7 +176,7 @@ export default async function ProductDetailPage({
                 href={product.ctaLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 text-center px-3 py-3 text-sm font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+                className="flex-1 text-center px-3 py-3 text-sm font-bold text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors"
               >
                 สั่งซื้อเลย
               </Link>

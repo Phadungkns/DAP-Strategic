@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { CheckCircle2, Users, ShoppingCart, CalendarCheck } from 'lucide-react';
 import type { SanityProduct } from '@/types';
+import PaymentStepsSection from './PaymentStepsSection';
 
 function formatPrice(price: number): string {
   return price.toLocaleString('th-TH');
@@ -55,13 +56,13 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
         {product.suitableFor && product.suitableFor.length > 0 && (
           <div className="mb-12">
             <h3 className="font-display text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5 text-blue-500" />
+              <Users className="w-5 h-5 text-blue-900" />
               เหมาะสำหรับ
             </h3>
             <div className="grid sm:grid-cols-2 gap-3">
               {product.suitableFor.map((item, i) => (
                 <div key={i} className="flex items-center gap-2 text-gray-600">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-900 flex-shrink-0" />
                   {item}
                 </div>
               ))}
@@ -92,7 +93,7 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
               href={product.ctaLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors active:scale-[0.98] flex-1"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors active:scale-[0.98] flex-1"
             >
               <ShoppingCart className="w-5 h-5" />
               สั่งซื้อเลย
@@ -103,7 +104,7 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
               href={product.bookingLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-blue-600 border border-blue-200 rounded-xl hover:bg-blue-50 transition-colors active:scale-[0.98] flex-1"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-blue-900 border-2 border-blue-900 rounded-full hover:bg-blue-50 transition-colors active:scale-[0.98] flex-1"
             >
               <CalendarCheck className="w-5 h-5" />
               จองราคาพิเศษ {formatPrice(product.bookingPrice)} บาท
@@ -125,6 +126,13 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
         </div>
 
       </div>
+
+      {/* Payment Steps (ขยายเต็มกว้างขึ้นเป็น max-w-7xl) */}
+      {product.paymentSetting && product.paymentSetting.steps?.length > 0 && (
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <PaymentStepsSection paymentSetting={product.paymentSetting} />
+        </div>
+      )}
     </section>
   );
 }

@@ -132,6 +132,17 @@ export type SanityBlock = any;
 
 export type ProductSection = ProductHeroSection | ProductStorySection | ProductSocialProofSection;
 
+/* ── Payment Settings Types ── */
+export interface PaymentStep {
+  description?: string;
+  imageUrl?: string;
+}
+
+export interface PaymentSettings {
+  _id: string;
+  steps: PaymentStep[];
+}
+
 /* ── Sanity Product Type ── */
 export interface SanityProduct {
   _id: string;
@@ -150,6 +161,7 @@ export interface SanityProduct {
   imageUrl?: string;
   ctaLink?: string;
   bookingLink?: string;
+  paymentSetting?: PaymentSettings;
   order?: number;
   isActive?: boolean;
   seo?: {

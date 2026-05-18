@@ -126,6 +126,13 @@ export const productBySlugQuery = `
     "imageUrl": image.asset->url,
     ctaLink,
     bookingLink,
+    "paymentSetting": paymentSetting-> {
+      _id,
+      steps[] {
+        description,
+        "imageUrl": image.asset->url
+      }
+    },
     isActive,
     seo
   }
