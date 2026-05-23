@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Kanit, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -9,8 +9,13 @@ import { sanityClient } from '@/lib/sanity';
 import { siteSettingsQuery } from '@/lib/queries';
 import { SiteSettings } from '@/types';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' });
+const kanit = Kanit({
+  subsets: ['thai', 'latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display', display: 'swap' });
 
 // Default metadata สำหรับทั้งเว็บ — แต่ละหน้าจะ override ผ่าน generateMetadata()
 export const metadata: Metadata = {
@@ -34,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html lang="th" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="th" className={`${kanit.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased bg-white text-gray-900" suppressHydrationWarning>
         <JsonLd />
         <div className="min-h-screen flex flex-col font-sans">

@@ -131,7 +131,6 @@ export default function DetailHeroSection({
                   />
                   {hasBoth && (
                     <div className="absolute bottom-2 left-3 text-xs text-white/40 font-medium tracking-wide">
-                      ภาพปก
                     </div>
                   )}
                 </div>
@@ -196,7 +195,6 @@ export default function DetailHeroSection({
 
                   {hasBoth && (
                     <div className="absolute bottom-2 left-3 text-xs text-white/40 font-medium tracking-wide z-10 pointer-events-none">
-                      วิดีโอตัวอย่าง
                     </div>
                   )}
                 </div>
