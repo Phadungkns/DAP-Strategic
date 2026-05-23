@@ -42,7 +42,8 @@ export const siteSettingsQuery = `
       platform,
       url
     },
-    footerTagline
+    footerTagline,
+    "logoUrl": logo.asset->url
   }
 `;
 

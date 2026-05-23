@@ -58,8 +58,8 @@ export default function Header({ settings }: HeaderProps) {
           </span>
           <div className="flex items-center gap-1.5 mt-1">
             <Image src="/images/logo.jpg" alt="DAP Strategic Logo" width={32} height={32} className="rounded-full object-cover shrink-0" />
-            <span className="font-display font-bold text-[10px] md:text-xs tracking-[0.25em] text-blue-900 uppercase leading-none">
-              Dongfunda
+            <span className="font-display font-bold text-[10px] md:text-xs tracking-[0.25em] text-blue-900 leading-none -mr-[0.25em]">
+              DongFunda
             </span>
           </div>
         </Link>

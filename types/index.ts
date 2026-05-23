@@ -61,6 +61,7 @@ export interface SiteSettings {
       url: string;
     };
   };
+  logoUrl?: string;
   contact?: {
     email?: string;
     phone?: string;

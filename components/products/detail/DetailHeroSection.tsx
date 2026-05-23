@@ -89,11 +89,7 @@ export default function DetailHeroSection({
                 </>
               )}
             </h1>
-            {section.subheading && (
-              <p className="text-lg md:text-xl text-slate-400 leading-relaxed whitespace-pre-line">
-                {section.subheading}
-              </p>
-            )}
+
           </div>
 
           {/* Pain Points */}
@@ -115,7 +111,13 @@ export default function DetailHeroSection({
             </div>
           )}
 
-          {/* Media row */}
+          {/* Subheading */}
+          {section.subheading && (
+            <p className="text-lg md:text-xl text-slate-400 leading-relaxed whitespace-pre-line max-w-3xl mx-auto mb-4 text-center">
+              {section.subheading}
+            </p>
+          )}
+
           {(hasVideo || hasImage) && (
             <div className={`grid gap-5 ${hasBoth ? 'lg:grid-cols-2' : 'grid-cols-1 max-w-2xl mx-auto'}`}>
 

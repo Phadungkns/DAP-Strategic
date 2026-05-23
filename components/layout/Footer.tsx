@@ -19,18 +19,24 @@ export default async function Footer() {
   const phone = settings?.contact?.phone || '02-XXX-XXXX';
   const lineUrl = settings?.contact?.lineUrl;
   const footerTagline = settings?.footerTagline || 'พาร์ทเนอร์ที่ผู้บริหารและเจ้าของธุรกิจ SME ไว้วางใจ เพื่อการเติบโตอย่างยั่งยืน';
+  const logoUrl = settings?.logoUrl || '/images/logo.jpg';
 
   return (
     <footer className="bg-gray-950 py-12 text-gray-400 text-sm mt-auto">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div className="col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <Image src="/images/logo.jpg" alt={`${companyName} Logo`} width={40} height={40} className="rounded object-cover" />
-              <span className="font-display font-bold text-lg tracking-tight text-white">
+          <div className="col-span-2 flex flex-col items-start">
+            <Link href="/" className="flex flex-col items-end justify-center select-none group mb-4">
+              <span className="font-display font-black text-2xl md:text-3xl tracking-tight text-white leading-none">
                 {companyName}
               </span>
-            </div>
+              <div className="flex items-center gap-1.5 mt-1">
+                <Image src={logoUrl} alt={`${companyName} Logo`} width={32} height={32} className="rounded-full object-cover shrink-0" />
+                <span className="font-display font-bold text-[10px] md:text-xs tracking-[0.25em] text-blue-300 leading-none -mr-[0.25em]">
+                  DongFunda
+                </span>
+              </div>
+            </Link>
             <p className="max-w-xs">{footerTagline}</p>
           </div>
           <div>
