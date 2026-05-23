@@ -182,6 +182,7 @@ export interface SanityProduct {
   description?: string;
   features?: string[];
   suitableFor?: string[];
+  faqs?: { question: string; answer: string }[];
   originalPrice?: number;
   salePrice: number;
   bookingPrice?: number;

@@ -2,12 +2,46 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { CheckCircle2, Users, ShoppingCart, CalendarCheck } from 'lucide-react';
+import { CheckCircle2, Users, ShoppingCart, CalendarCheck, ChevronDown, HelpCircle } from 'lucide-react';
 import type { SanityProduct } from '@/types';
 import PaymentModal from './PaymentModal';
 
 function formatPrice(price: number): string {
   return price.toLocaleString('th-TH');
+}
+
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="border border-gray-100 rounded-xl overflow-hidden mb-3 bg-white">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-start justify-between p-4 hover:bg-gray-50 transition-colors text-left gap-4"
+      >
+        <div className="flex gap-3 items-start">
+          <div className="shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-display font-bold text-xs mt-0.5">
+            Q
+          </div>
+          <span className="font-medium text-gray-900 leading-relaxed">{question}</span>
+        </div>
+        <ChevronDown 
+          className={`w-5 h-5 text-gray-400 shrink-0 mt-1 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+        />
+      </button>
+      <div 
+        className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+      >
+        <div className="overflow-hidden">
+          <div className="p-4 pt-0 flex gap-3 items-start">
+            <div className="shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-900 flex items-center justify-center font-display font-bold text-xs mt-0.5">
+              A
+            </div>
+            <div className="text-gray-600 leading-relaxed whitespace-pre-line">{answer}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 interface ProductDetailInfoProps {
@@ -89,6 +123,21 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-900 flex-shrink-0" />
                     {item}
                   </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* FAQs */}
+          {product.faqs && product.faqs.length > 0 && (
+            <div className="mb-12">
+              <h3 className="font-display text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <HelpCircle className="w-5 h-5 text-blue-900" />
+                คำถามที่พบบ่อย (Q&A)
+              </h3>
+              <div>
+                {product.faqs.map((faq, i) => (
+                  <FAQItem key={i} question={faq.question} answer={faq.answer} />
                 ))}
               </div>
             </div>

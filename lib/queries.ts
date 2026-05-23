@@ -136,6 +136,7 @@ export const productBySlugQuery = `
     description,
     features,
     suitableFor,
+    faqs,
     originalPrice,
     salePrice,
     bookingPrice,
