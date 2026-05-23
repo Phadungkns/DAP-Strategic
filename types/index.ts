@@ -108,9 +108,24 @@ export interface HomePage {
 /* ── Product Section Types ── */
 export interface ProductHeroSection {
   _type: 'heroSection';
+  badge?: string;
+  heading?: string;
+  highlight?: string;
   subheading?: string;
+  painPoints?: Array<{ text: string }>;
   videoPreview?: string;
   thumbnailUrl?: string;
+}
+
+export interface ProductSolutionSection {
+  _type: 'solutionSection';
+  heading?: string;
+  description?: string;
+}
+
+export interface ProductBenefitSection {
+  _type: 'benefitSection';
+  benefits?: Array<{ title: string; description: string }>;
 }
 
 export interface ProductStorySection {
@@ -130,7 +145,12 @@ export interface ProductSocialProofSection {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SanityBlock = any;
 
-export type ProductSection = ProductHeroSection | ProductStorySection | ProductSocialProofSection;
+export type ProductSection =
+  | ProductHeroSection
+  | ProductSolutionSection
+  | ProductBenefitSection
+  | ProductStorySection
+  | ProductSocialProofSection;
 
 /* ── Payment Settings Types ── */
 export interface PaymentStep {
@@ -140,7 +160,13 @@ export interface PaymentStep {
 
 export interface PaymentSettings {
   _id: string;
+  heading?: string;
   steps: PaymentStep[];
+}
+
+export interface PaymentOptions {
+  purchase?: PaymentSettings;
+  booking?: PaymentSettings;
 }
 
 /* ── Sanity Product Type ── */
@@ -149,6 +175,7 @@ export interface SanityProduct {
   title: string;
   slug?: { current: string };
   category?: { title: string; slug?: { current: string } };
+  hero?: ProductHeroSection;
   sections?: ProductSection[];
   subtitle?: string;
   description?: string;
@@ -161,7 +188,7 @@ export interface SanityProduct {
   imageUrl?: string;
   ctaLink?: string;
   bookingLink?: string;
-  paymentSetting?: PaymentSettings;
+  paymentOptions?: PaymentOptions;
   order?: number;
   isActive?: boolean;
   seo?: {

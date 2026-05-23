@@ -8,14 +8,19 @@ import { productBySlugQuery, productSlugsQuery } from '@/lib/queries';
 import type {
   SanityProduct,
   ProductHeroSection,
+  ProductSolutionSection,
+  ProductBenefitSection,
   ProductStorySection,
   ProductSocialProofSection,
 } from '@/types';
 import { generatePageMetadata } from '@/lib/seo';
 import DetailHeroSection from '@/components/products/detail/DetailHeroSection';
+import DetailSolutionSection from '@/components/products/detail/DetailSolutionSection';
+import DetailBenefitSection from '@/components/products/detail/DetailBenefitSection';
 import DetailStorySection from '@/components/products/detail/DetailStorySection';
 import DetailSocialProofSection from '@/components/products/detail/DetailSocialProofSection';
 import ProductDetailInfo from '@/components/products/detail/ProductDetailInfo';
+import MobileStickyBar from '@/components/products/detail/MobileStickyBar';
 
 export const revalidate = 3600;
 
@@ -79,9 +84,12 @@ export default async function ProductDetailPage({
 
   if (!product) notFound();
 
-  const heroSections = (
-    product.sections?.filter((s) => s._type === 'heroSection') || []
-  ) as ProductHeroSection[];
+  const solutionSections = (
+    product.sections?.filter((s) => s._type === 'solutionSection') || []
+  ) as ProductSolutionSection[];
+  const benefitSections = (
+    product.sections?.filter((s) => s._type === 'benefitSection') || []
+  ) as ProductBenefitSection[];
   const storySections = (
     product.sections?.filter((s) => s._type === 'storySection') || []
   ) as ProductStorySection[];
@@ -89,7 +97,7 @@ export default async function ProductDetailPage({
     product.sections?.filter((s) => s._type === 'socialProofSection') || []
   ) as ProductSocialProofSection[];
 
-  const primaryHero = heroSections[0] || null;
+  const primaryHero = product.hero || null;
 
   return (
     // พื้นหลังหลักเป็น white ตลอด — แต่ละ section จัดการ bg เองตาม rhythm
@@ -97,7 +105,7 @@ export default async function ProductDetailPage({
 
       {/* ── Breadcrumb strip (ต่อจาก Header ซึ่งเป็น dark) ── */}
       <div className="bg-gray-950">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl pt-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl pt-6">
           <Link
             href="/products"
             className="group inline-flex items-center gap-2 py-3 text-sm text-white/40 hover:text-white/90 transition-colors duration-200"
@@ -135,6 +143,16 @@ export default async function ProductDetailPage({
         </section>
       )}
 
+      {/* ── Solution Sections ── */}
+      {solutionSections.map((section, idx) => (
+        <DetailSolutionSection key={`solution-${idx}`} section={section} />
+      ))}
+
+      {/* ── Benefit Sections ── */}
+      {benefitSections.map((section, idx) => (
+        <DetailBenefitSection key={`benefit-${idx}`} section={section} />
+      ))}
+
       {/* 2. Story Sections — สีขาว */}
       {storySections.map((section, idx) => (
         <DetailStorySection key={`story-${idx}`} section={section} />
@@ -149,41 +167,7 @@ export default async function ProductDetailPage({
       <ProductDetailInfo product={product} />
 
       {/* 5. Mobile sticky bar */}
-      <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t border-gray-100 z-50 px-4 py-3">
-        <div className="flex items-center gap-3 max-w-lg mx-auto">
-          <div className="flex-shrink-0 text-right">
-            <div className="font-display text-xl font-bold text-gray-900 leading-tight">
-              {product.salePrice.toLocaleString('th-TH')}
-              <span className="text-sm font-normal text-gray-400 ml-0.5">฿</span>
-            </div>
-            {product.bookingPrice && (
-              <div className="text-xs text-gray-400">จอง {product.bookingPrice.toLocaleString('th-TH')}฿</div>
-            )}
-          </div>
-          <div className="flex-1 flex gap-2">
-            {product.bookingLink && product.bookingPrice && (
-              <Link
-                href={product.bookingLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 text-center px-3 py-3 text-sm font-semibold text-blue-900 border-2 border-blue-900 rounded-full hover:bg-blue-50 transition-colors"
-              >
-                จอง
-              </Link>
-            )}
-            {product.ctaLink && (
-              <Link
-                href={product.ctaLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 text-center px-3 py-3 text-sm font-bold text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors"
-              >
-                สั่งซื้อเลย
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
+      <MobileStickyBar product={product} />
 
       {/* Spacer มือถือ */}
       <div className="h-20 lg:hidden" />

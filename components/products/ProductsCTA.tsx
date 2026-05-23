@@ -23,7 +23,7 @@ export default function ProductsCTA({ data }: ProductsCTAProps) {
           </Link>
           <Link href="https://line.me" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all">
             <MessageCircle className="mr-2 w-5 h-5" />
-            สอบถามแอดมิน
+            คุยกับเราผ่าน LINE
           </Link>
         </div>
       </div>

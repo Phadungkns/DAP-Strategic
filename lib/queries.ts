@@ -97,12 +97,28 @@ export const productBySlugQuery = `
     title,
     slug,
     "category": category->{ title, slug },
+    hero {
+      badge,
+      heading,
+      highlight,
+      subheading,
+      painPoints[] {
+        text
+      },
+      videoPreview,
+      "thumbnailUrl": thumbnail.asset->url
+    },
     sections[] {
       _type,
-      _type == "heroSection" => {
-        subheading,
-        videoPreview,
-        "thumbnailUrl": thumbnail.asset->url
+      _type == "solutionSection" => {
+        heading,
+        description
+      },
+      _type == "benefitSection" => {
+        benefits[] {
+          title,
+          description
+        }
       },
       _type == "storySection" => {
         heading,
@@ -126,11 +142,22 @@ export const productBySlugQuery = `
     "imageUrl": image.asset->url,
     ctaLink,
     bookingLink,
-    "paymentSetting": paymentSetting-> {
-      _id,
-      steps[] {
-        description,
-        "imageUrl": image.asset->url
+    paymentOptions {
+      "purchase": purchase-> {
+        _id,
+        heading,
+        steps[] {
+          description,
+          "imageUrl": image.asset->url
+        }
+      },
+      "booking": booking-> {
+        _id,
+        heading,
+        steps[] {
+          description,
+          "imageUrl": image.asset->url
+        }
       }
     },
     isActive,

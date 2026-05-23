@@ -4,7 +4,14 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Youtube } from 'lucide-react';
+import type { SiteSettings } from '@/types';
+
+const LineIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.564.39.084.922.258 1.057.592.12.303.079.778.039 1.082-.08.621-.386 2.428-.482 3.239-.059.502.114.547.451.324.336-.223 5.424-3.555 7.402-6.079.141-.188.29-.377.424-.577 3.226-2.072 5.073-4.992 5.073-8.249z" />
+  </svg>
+);
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -13,9 +20,16 @@ const navItems = [
   { href: '/contact', label: 'About / Contact' },
 ];
 
-export default function Header() {
+interface HeaderProps {
+  settings: SiteSettings | null;
+}
+
+export default function Header({ settings }: HeaderProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const lineUrl = settings?.contact?.lineUrl || 'https://line.me';
+  const youtubeUrl = settings?.socialLinks?.find((link) => link.platform === 'youtube')?.url || 'https://youtube.com';
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -38,11 +52,16 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.jpg" alt="DAP Strategic Logo" width={50} height={50} className="rounded object-cover" />
-          <span className="font-display font-bold text-xl tracking-tight text-gray-900">
+        <Link href="/" className="flex flex-col items-end justify-center select-none group">
+          <span className="font-display font-black text-2xl md:text-3xl tracking-tight text-gray-900 leading-none">
             DAP Strategic
           </span>
+          <div className="flex items-center gap-1.5 mt-1">
+            <Image src="/images/logo.jpg" alt="DAP Strategic Logo" width={32} height={32} className="rounded-full object-cover shrink-0" />
+            <span className="font-display font-bold text-[10px] md:text-xs tracking-[0.25em] text-blue-900 uppercase leading-none">
+              Dongfunda
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
@@ -63,10 +82,29 @@ export default function Header() {
         </nav>
 
         {/* Desktop CTA + Mobile Toggle */}
-        <div className="flex items-center gap-4">
-          <Link href="/contact#lead-form" className="hidden md:inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors">
-            ปรึกษาผู้เชี่ยวชาญ
-          </Link>
+        <div className="flex items-center gap-3">
+          {lineUrl && (
+            <a
+              href={lineUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs md:text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 shadow-sm hover:shadow transition-all"
+            >
+              <LineIcon className="w-4 h-4 shrink-0" />
+              AddLine
+            </a>
+          )}
+          {youtubeUrl && (
+            <a
+              href={youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs md:text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 shadow-sm hover:shadow transition-all"
+            >
+              <Youtube className="w-4 h-4 shrink-0" />
+              YouTube
+            </a>
+          )}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
@@ -102,14 +140,31 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          <div className="mt-4 px-4">
-            <Link
-              href="/contact#lead-form"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors"
-            >
-              ปรึกษาผู้เชี่ยวชาญ
-            </Link>
+          <div className="mt-4 px-4 flex flex-col sm:flex-row gap-3">
+            {lineUrl && (
+              <a
+                href={lineUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors"
+              >
+                <LineIcon className="w-4.5 h-4.5 shrink-0" />
+                AddLine
+              </a>
+            )}
+            {youtubeUrl && (
+              <a
+                href={youtubeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors"
+              >
+                <Youtube className="w-4.5 h-4.5 shrink-0" />
+                YouTube
+              </a>
+            )}
           </div>
         </nav>
       </div>

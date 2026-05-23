@@ -139,19 +139,25 @@ export default function PaymentStepsSection({ paymentSetting }: PaymentStepsSect
         ) : (
           /* ── Static Grid Layout (<= 3 steps) — ขยายขนาดใหญ่พิเศษเต็มจอ ── */
           <div
-            className={`grid grid-cols-1 sm:grid-cols-2 ${
-              steps.length === 1 ? 'lg:grid-cols-1' : steps.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'
-            } gap-8 lg:gap-12 w-full`}
+            className={
+              steps.length === 1
+                ? 'flex justify-center w-full'
+                : `grid grid-cols-1 sm:grid-cols-2 ${steps.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'} gap-8 lg:gap-12 w-full`
+            }
           >
             {steps.map((step, index) => (
               <div
                 key={index}
-                className="relative flex flex-col items-center text-center group w-full"
+                className={`relative flex flex-col items-center text-center group w-full ${
+                  steps.length === 1 ? 'max-w-lg' : ''
+                }`}
               >
                 {/* Step number badge — ขยายใหญ่ขึ้น */}
-                <div className="relative z-10 flex items-center justify-center w-12 h-12 lg:w-16 lg:h-16 rounded-full bg-white border-2 border-blue-900/30 text-blue-900 font-bold text-base lg:text-xl mb-6 group-hover:border-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-all duration-300">
-                  {index + 1}
-                </div>
+                {steps.length > 1 && (
+                  <div className="relative z-10 flex items-center justify-center w-12 h-12 lg:w-16 lg:h-16 rounded-full bg-white border-2 border-blue-900/30 text-blue-900 font-bold text-base lg:text-xl mb-6 group-hover:border-blue-900 group-hover:bg-blue-900 group-hover:text-white transition-all duration-300">
+                    {index + 1}
+                  </div>
+                )}
 
                 {/* Image — ขยายความกว้างเต็มการ์ดสัดส่วนพรีเมียม 16/10 เอาเงาออกทั้งหมด */}
                 {step.imageUrl ? (

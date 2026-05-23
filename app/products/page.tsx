@@ -4,9 +4,7 @@ import { ShoppingCart } from 'lucide-react';
 import { sanityClient } from '@/lib/sanity';
 import { productsQuery, productsPageQuery } from '@/lib/queries';
 import type { SanityProduct, ProductsPageContent } from '@/types';
-import ProductHero from '@/components/products/ProductHero';
-import ProductSolution from '@/components/products/ProductSolution';
-import ProductBenefits from '@/components/products/ProductBenefits';
+import PageHeader from '@/components/shared/PageHeader';
 import ProductGrid from '@/components/products/ProductGrid';
 import ProductsCTA from '@/components/products/ProductsCTA';
 import { generatePageMetadata } from '@/lib/seo';
@@ -46,30 +44,15 @@ export default async function ProductsPage() {
 
   return (
     <div className="bg-gray-50">
-      {/* 1. Pain Point Hero */}
-      <ProductHero data={pageData} />
+      <PageHeader
+        badge="Our Products"
+        title={pageData?.productsSection?.heading || "ผลิตภัณฑ์และคอร์สเรียน"}
+        description={pageData?.productsSection?.subheading || "E-book และคอร์สเรียนด้านการลงทุนและบริหารธุรกิจ เพื่ออัปสกิลให้เหนือกว่าคู่แข่ง"}
+      />
 
-      {/* 2. Solution */}
-      <ProductSolution data={pageData} />
-
-      {/* 3. Benefits */}
-      <ProductBenefits data={pageData} />
-
-      {/* 4. Product List */}
+      {/* Product List */}
       <section className="py-20 bg-white" id="products">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-
-          {/* Heading */}
-          <div className="text-center mb-10">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-blue-900 mb-3 inline-flex items-center justify-center gap-3">
-              {pageData?.productsSection?.heading || 'เลือกผลิตภัณฑ์ที่เหมาะกับคุณ'}
-              <ShoppingCart className="w-9 h-9 md:w-11 md:h-11 text-blue-900 flex-shrink-0" />
-            </h2>
-            <p className="text-gray-500">
-              {pageData?.productsSection?.subheading || 'อัปสกิลการลงทุนและการบริหารธุรกิจให้เหนือกว่าคู่แข่ง'}
-            </p>
-          </div>
-
           {/* Grid with category filter tabs */}
           {hasProducts ? (
             <ProductGrid products={products} />
@@ -82,7 +65,7 @@ export default async function ProductsPage() {
         </div>
       </section>
 
-      {/* 5. Final CTA */}
+      {/* Final CTA */}
       <ProductsCTA data={pageData} />
     </div>
   );

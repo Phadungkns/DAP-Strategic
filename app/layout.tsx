@@ -5,6 +5,9 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import JsonLd from '@/components/shared/JsonLd';
 import { generatePageMetadata } from '@/lib/seo';
+import { sanityClient } from '@/lib/sanity';
+import { siteSettingsQuery } from '@/lib/queries';
+import { SiteSettings } from '@/types';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' });
@@ -22,13 +25,20 @@ export const metadata: Metadata = {
   ),
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  let settings: SiteSettings | null = null;
+  try {
+    settings = await sanityClient.fetch<SiteSettings>(siteSettingsQuery);
+  } catch (error) {
+    console.error('Failed to fetch site settings in layout:', error);
+  }
+
   return (
     <html lang="th" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased bg-white text-gray-900" suppressHydrationWarning>
         <JsonLd />
         <div className="min-h-screen flex flex-col font-sans">
-          <Header />
+          <Header settings={settings} />
           <main className="flex-1">
             {children}
           </main>
