@@ -10,7 +10,7 @@ import { slugify } from '@/lib/utils';
 import { generatePageMetadata } from '@/lib/seo';
 import type { SanityService, ServicesPageContent } from '@/types';
 
-export const revalidate = 3600; // revalidate ทุก 1 ชั่วโมง
+export const revalidate = 30;
 
 // ── SEO: Dynamic metadata from Sanity ──
 export async function generateMetadata(): Promise<Metadata> {

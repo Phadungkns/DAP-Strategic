@@ -9,7 +9,7 @@ import ProductGrid from '@/components/products/ProductGrid';
 import ProductsCTA from '@/components/products/ProductsCTA';
 import { generatePageMetadata } from '@/lib/seo';
 
-export const revalidate = 3600;
+export const revalidate = 30;
 
 // ── SEO ──
 export async function generateMetadata(): Promise<Metadata> {

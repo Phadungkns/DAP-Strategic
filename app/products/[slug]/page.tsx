@@ -22,7 +22,7 @@ import DetailSocialProofSection from '@/components/products/detail/DetailSocialP
 import ProductDetailInfo from '@/components/products/detail/ProductDetailInfo';
 import MobileStickyBar from '@/components/products/detail/MobileStickyBar';
 
-export const revalidate = 3600;
+export const revalidate = 30;
 
 // ── Static Params for SSG ──
 export async function generateStaticParams() {

@@ -9,7 +9,7 @@ import { siteSettingsQuery, aboutPageQuery } from '@/lib/queries';
 import { generatePageMetadata } from '@/lib/seo';
 import type { SiteSettings, AboutPageContent } from '@/types';
 
-export const revalidate = 3600;
+export const revalidate = 30;
 
 // ── SEO: Dynamic metadata from Sanity ──
 export async function generateMetadata(): Promise<Metadata> {
