@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import JsonLd from '@/components/shared/JsonLd';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { generatePageMetadata } from '@/lib/seo';
 import { sanityClient } from '@/lib/sanity';
 import { siteSettingsQuery } from '@/lib/queries';
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </main>
           <Footer />
         </div>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID as string} />
       </body>
     </html>
   );
