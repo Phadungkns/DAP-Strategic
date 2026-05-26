@@ -35,8 +35,9 @@ export default function HeroSection({ hero }: HeroSectionProps) {
             ดูบริการของเรา
             <ArrowRight className="ml-2 w-5 h-5" />
           </Link>
-          <Link href="/products" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-gray-900 bg-white border border-gray-200 rounded-full hover:bg-gray-50 hover:border-gray-300 transition-all">
+          <Link href="/products" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30">
             ดูสินค้าของเรา
+            <ArrowRight className="ml-2 w-5 h-5" />
           </Link>
         </div>
       </div>
