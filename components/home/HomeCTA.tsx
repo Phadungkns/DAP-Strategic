@@ -33,11 +33,11 @@ export default async function HomeCTA({ cta }: HomeCTAProps) {
           {description}
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href="/contact#lead-form" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-blue-900 bg-white rounded-full hover:bg-gray-50 transition-all shadow-xl shadow-black/10">
-            ติดต่อเรา
+          <Link href="/services" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-blue-900 bg-white rounded-full hover:bg-gray-50 transition-all shadow-xl shadow-black/10">
+            ดูบริการของเรา
           </Link>
           <Link href="/products" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-800 border border-blue-700 rounded-full hover:bg-blue-700 transition-all">
-            ดูคอร์สเรียน
+            ดูสินค้าของเรา
           </Link>
           {lineUrl && (
           <Link href={lineUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all shadow-xl shadow-[#00B900]/20">
