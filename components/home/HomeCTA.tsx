@@ -1,13 +1,24 @@
 import React from 'react';
 import Link from 'next/link';
 import { MessageCircle } from 'lucide-react';
-import type { HomePage } from '@/types';
+import type { HomePage, SiteSettings } from '@/types';
+import { sanityClient } from '@/lib/sanity';
+import { siteSettingsQuery } from '@/lib/queries';
 
 interface HomeCTAProps {
   cta?: HomePage['cta'];
 }
 
-export default function HomeCTA({ cta }: HomeCTAProps) {
+export default async function HomeCTA({ cta }: HomeCTAProps) {
+  let settings: SiteSettings | null = null;
+
+  try {
+    settings = await sanityClient.fetch<SiteSettings>(siteSettingsQuery);
+  } catch (error) {
+    console.error('Failed to fetch site settings:', error);
+  }
+
+  const lineUrl = settings?.contact?.lineUrl;
   const heading = cta?.heading || 'พร้อมที่จะก้าวไปอีกขั้นกับธุรกิจของคุณหรือยัง?';
   const description = cta?.description || 'ให้เราช่วยวิเคราะห์และวางแผนกลยุทธ์ที่เหมาะสมที่สุดสำหรับธุรกิจของคุณ ปรึกษาเบื้องต้นฟรี ไม่มีค่าใช้จ่าย';
 
@@ -28,10 +39,12 @@ export default function HomeCTA({ cta }: HomeCTAProps) {
           <Link href="/products" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-800 border border-blue-700 rounded-full hover:bg-blue-700 transition-all">
             ดูคอร์สเรียน
           </Link>
-          <Link href="https://line.me" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all shadow-xl shadow-[#00B900]/20">
+          {lineUrl && (
+          <Link href={lineUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all shadow-xl shadow-[#00B900]/20">
             <MessageCircle className="mr-2 w-5 h-5" />
             คุยกับเราผ่าน LINE
           </Link>
+          )}
         </div>
       </div>
     </section>

@@ -1,13 +1,25 @@
 import React from 'react';
 import Link from 'next/link';
 import { MessageCircle } from 'lucide-react';
-import type { ProductsPageContent } from '@/types';
+import type { ProductsPageContent, SiteSettings } from '@/types';
+import { sanityClient } from '@/lib/sanity';
+import { siteSettingsQuery } from '@/lib/queries';
 
 interface ProductsCTAProps {
   data: ProductsPageContent | null;
 }
 
-export default function ProductsCTA({ data }: ProductsCTAProps) {
+export default async function ProductsCTA({ data }: ProductsCTAProps) {
+  let settings: SiteSettings | null = null;
+
+  try {
+    settings = await sanityClient.fetch<SiteSettings>(siteSettingsQuery);
+  } catch (error) {
+    console.error('Failed to fetch site settings:', error);
+  }
+
+  const lineUrl = settings?.contact?.lineUrl;
+
   return (
     <section className="py-20 bg-blue-900 text-white text-center">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
@@ -21,10 +33,12 @@ export default function ProductsCTA({ data }: ProductsCTAProps) {
           <Link href="#products" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-blue-900 bg-white rounded-full hover:bg-gray-50 transition-all shadow-xl">
             เลือกซื้อสินค้า
           </Link>
-          <Link href="https://line.me" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all">
+          {lineUrl && (
+          <Link href={lineUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all">
             <MessageCircle className="mr-2 w-5 h-5" />
             คุยกับเราผ่าน LINE
           </Link>
+          )}
         </div>
       </div>
     </section>
