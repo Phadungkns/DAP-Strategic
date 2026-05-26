@@ -149,11 +149,11 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
           {/* Price */}
           <div className="mb-6">
             {hasDiscount && (
-              <div className="text-gray-400 line-through text-sm mb-1">
+              <div className="text-red-500 line-through text-md font-bold mb-1">
                 ราคาปกติ {formatPrice(product.originalPrice!)} บาท
               </div>
             )}
-            <div className="font-display text-4xl font-bold text-gray-900">
+            <div className="font-display text-5xl font-bold text-gray-900">
               {formatPrice(product.salePrice)}{' '}
               <span className="text-lg font-normal text-gray-400">บาท</span>
             </div>
