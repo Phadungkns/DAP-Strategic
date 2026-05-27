@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { X, Maximize2, AlertCircle, MessageCircle } from 'lucide-react';
 import type { ProductHeroSection } from '@/types';
+import { LinkifyText } from '@/components/shared/LinkifyText';
 
 interface DetailHeroSectionProps {
   section: ProductHeroSection;
@@ -127,7 +128,9 @@ export default function DetailHeroSection({
                     <div className="w-5 h-5 rounded-full border border-white/20 flex items-center justify-center shrink-0 mt-0.5">
                       <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
                     </div>
-                    <span className="text-slate-300 text-sm leading-relaxed">{pain.text}</span>
+                    <span className="text-slate-300 text-sm leading-relaxed">
+                      <LinkifyText text={pain.text} />
+                    </span>
                   </div>
                 ))}
               </div>
@@ -136,8 +139,8 @@ export default function DetailHeroSection({
 
           {/* Subheading */}
           {section.subheading && (
-            <p className="text-lg md:text-xl text-slate-400 leading-relaxed whitespace-pre-line max-w-3xl mx-auto mb-4 text-center">
-              {section.subheading}
+            <p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-3xl mx-auto mb-4 text-center">
+              <LinkifyText text={section.subheading} />
             </p>
           )}
 

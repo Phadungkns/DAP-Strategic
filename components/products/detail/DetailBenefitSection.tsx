@@ -1,6 +1,7 @@
 import React from 'react';
 import { BookOpen } from 'lucide-react';
 import type { ProductBenefitSection } from '@/types';
+import { LinkifyText } from '@/components/shared/LinkifyText';
 
 const BenefitIcon = BookOpen;
 
@@ -24,7 +25,9 @@ export default function DetailBenefitSection({ section }: DetailBenefitSectionPr
               </div>
               <div className="flex flex-col gap-2">
                 <h3 className="text-lg font-semibold text-gray-900">{benefit.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed whitespace-pre-line">{benefit.description}</p>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  <LinkifyText text={benefit.description} />
+                </p>
               </div>
             </div>
           ))}

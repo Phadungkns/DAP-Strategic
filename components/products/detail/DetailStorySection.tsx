@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import type { ProductStorySection } from '@/types';
+import { linkifyToHtml } from '@/components/shared/LinkifyText';
 
 interface DetailStorySectionProps {
   section: ProductStorySection;
@@ -14,6 +15,8 @@ function renderPortableText(blocks: ProductStorySection['content']) {
       const text = block.children
         ?.map((child: { text?: string; marks?: string[] }) => {
           let content = child.text || '';
+          // Linkify URLs before applying inline marks
+          content = linkifyToHtml(content);
           if (child.marks?.includes('strong')) content = `<strong>${content}</strong>`;
           if (child.marks?.includes('em')) content = `<em>${content}</em>`;
           return content;

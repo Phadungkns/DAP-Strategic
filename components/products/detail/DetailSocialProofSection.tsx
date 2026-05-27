@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { MessageSquare } from 'lucide-react';
 import type { ProductSocialProofSection } from '@/types';
+import { LinkifyText } from '@/components/shared/LinkifyText';
 
 interface DetailSocialProofSectionProps {
   section: ProductSocialProofSection;
@@ -26,8 +27,8 @@ export default function DetailSocialProofSection({ section }: DetailSocialProofS
             </h2>
           )}
           {section.description && (
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed whitespace-pre-line">
-              {section.description}
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
+              <LinkifyText text={section.description} />
             </p>
           )}
         </div>

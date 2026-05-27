@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ProductSolutionSection } from '@/types';
+import { LinkifyText } from '@/components/shared/LinkifyText';
 
 interface DetailSolutionSectionProps {
   section: ProductSolutionSection;
@@ -19,8 +20,8 @@ export default function DetailSolutionSection({ section }: DetailSolutionSection
             )}
           </h2>
           {section.description && (
-            <p className="text-xl text-gray-500 leading-relaxed whitespace-pre-line max-w-3xl">
-              {section.description}
+            <p className="text-xl text-gray-500 leading-relaxed max-w-3xl">
+              <LinkifyText text={section.description} />
             </p>
           )}
         </div>

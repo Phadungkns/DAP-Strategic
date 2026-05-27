@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { CheckCircle2, Users, ShoppingCart, CalendarCheck, ChevronDown, HelpCircle } from 'lucide-react';
 import type { SanityProduct } from '@/types';
 import PaymentModal from './PaymentModal';
+import { LinkifyText } from '@/components/shared/LinkifyText';
 
 function formatPrice(price: number): string {
   return price.toLocaleString('th-TH');
@@ -36,7 +37,9 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             <div className="shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-900 flex items-center justify-center font-display font-bold text-xs mt-0.5">
               A
             </div>
-            <div className="text-gray-600 leading-relaxed whitespace-pre-line">{answer}</div>
+            <div className="text-gray-600 leading-relaxed">
+              <LinkifyText text={answer} />
+            </div>
           </div>
         </div>
       </div>
@@ -84,8 +87,8 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
               <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">
                 รายละเอียด
               </h2>
-              <p className="text-gray-500 leading-relaxed whitespace-pre-line">
-                {product.description}
+              <p className="text-gray-500 leading-relaxed">
+                <LinkifyText text={product.description} />
               </p>
             </div>
           )}
@@ -103,7 +106,9 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
                     <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
                     </div>
-                    <span className="text-gray-600">{feature}</span>
+                    <span className="text-gray-600">
+                      <LinkifyText text={feature} />
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -121,7 +126,7 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
                 {product.suitableFor.map((item, i) => (
                   <div key={i} className="flex items-center gap-2 text-gray-600">
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-900 flex-shrink-0" />
-                    {item}
+                    <LinkifyText text={item} />
                   </div>
                 ))}
               </div>
