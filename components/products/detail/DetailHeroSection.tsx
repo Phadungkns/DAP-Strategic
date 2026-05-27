@@ -2,13 +2,15 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { X, Maximize2, AlertCircle } from 'lucide-react';
+import { X, Maximize2, AlertCircle, MessageCircle } from 'lucide-react';
 import type { ProductHeroSection } from '@/types';
 
 interface DetailHeroSectionProps {
   section: ProductHeroSection;
   productTitle: string;
   productImageUrl?: string;
+  categoryTitle?: string;
+  lineUrl?: string;
 }
 
 function getEmbedUrls(url: string): { inline: string; fullscreen: string } | null {
@@ -47,8 +49,17 @@ export default function DetailHeroSection({
   section,
   productTitle,
   productImageUrl,
+  categoryTitle,
+  lineUrl,
 }: DetailHeroSectionProps) {
   const [showVideo, setShowVideo] = useState(true);
+
+  let lineText = 'ทัก Line เพื่อสอบถามคอร์ส';
+  if (categoryTitle?.toLowerCase().includes('ebook') || categoryTitle?.toLowerCase().includes('e-book')) {
+    lineText = 'ทักไลน์เพื่อสอบถาม E-Book';
+  } else if (categoryTitle?.toLowerCase().includes('template')) {
+    lineText = 'ทักไลน์เพื่อสอบถาม Template';
+  }
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasVideo = !!section.videoPreview;
@@ -89,6 +100,18 @@ export default function DetailHeroSection({
                 </>
               )}
             </h1>
+
+            <div className="mt-8 mb-4">
+              <a
+                href={lineUrl || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#00B900] hover:bg-[#00a000] text-white font-medium text-lg transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#00B900]/25"
+              >
+                <MessageCircle className="w-5 h-5" />
+                {lineText}
+              </a>
+            </div>
 
           </div>
 

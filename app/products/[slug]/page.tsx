@@ -4,7 +4,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { ChevronLeft, LayoutGrid } from 'lucide-react';
 import { sanityClient } from '@/lib/sanity';
-import { productBySlugQuery, productSlugsQuery } from '@/lib/queries';
+import { productBySlugQuery, productSlugsQuery, siteSettingsQuery } from '@/lib/queries';
 import type {
   SanityProduct,
   ProductHeroSection,
@@ -76,10 +76,12 @@ export default async function ProductDetailPage({
   const { slug } = await params;
 
   let product: SanityProduct | null = null;
+  let siteSettings: any = null;
   try {
     product = await sanityClient.fetch<SanityProduct>(productBySlugQuery, { slug });
+    siteSettings = await sanityClient.fetch(siteSettingsQuery);
   } catch (error) {
-    console.error('Failed to fetch product:', error);
+    console.error('Failed to fetch data:', error);
   }
 
   if (!product) notFound();
@@ -125,6 +127,8 @@ export default async function ProductDetailPage({
           section={primaryHero}
           productTitle={product.title}
           productImageUrl={product.imageUrl}
+          categoryTitle={product.category?.title}
+          lineUrl={siteSettings?.contact?.lineUrl}
         />
       ) : (
         /* Fallback hero */
