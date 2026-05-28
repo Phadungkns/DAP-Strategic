@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { sanityClient } from '@/lib/sanity';
 import { siteSettingsQuery } from '@/lib/queries';
 import { SiteSettings } from '@/types';
+import TrackedLink from '@/components/shared/TrackedLink';
 
 export default async function Footer() {
   let settings: SiteSettings | null = null;
@@ -53,7 +54,7 @@ export default async function Footer() {
             <ul className="space-y-2">
               <li>{email}</li>
               <li>{phone}</li>
-              {lineUrl && <li><a href={lineUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LINE Official</a></li>}
+              {lineUrl && <li><TrackedLink href={lineUrl} section="footer" eventType="line" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LINE Official</TrackedLink></li>}
             </ul>
           </div>
         </div>

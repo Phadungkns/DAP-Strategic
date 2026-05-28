@@ -4,6 +4,7 @@ import { MessageCircle } from 'lucide-react';
 import type { ServicesPageContent, SiteSettings } from '@/types';
 import { sanityClient } from '@/lib/sanity';
 import { siteSettingsQuery } from '@/lib/queries';
+import TrackedLink from '@/components/shared/TrackedLink';
 
 interface ServicesCTAProps {
   data?: ServicesPageContent | null;
@@ -45,15 +46,17 @@ export default async function ServicesCTA({ data }: ServicesCTAProps) {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           {lineUrl && (
-            <Link
+            <TrackedLink
               href={lineUrl}
+              section="services_cta"
+              eventType="line"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all shadow-xl shadow-black/30 hover:scale-105 active:scale-95"
             >
               <MessageCircle className="mr-2 w-5 h-5" />
               คุยกับเราผ่าน LINE
-            </Link>
+            </TrackedLink>
           )}
         </div>
       </div>

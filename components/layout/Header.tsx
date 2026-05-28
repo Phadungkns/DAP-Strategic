@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Youtube } from 'lucide-react';
 import type { SiteSettings } from '@/types';
+import { GA } from '@/lib/analytics';
 
 const LineIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -89,6 +90,7 @@ export default function Header({ settings }: HeaderProps) {
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs md:text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 shadow-sm hover:shadow transition-all"
+              onClick={() => GA.clickLine('header')}
             >
               <LineIcon className="w-4 h-4 shrink-0" />
               AddLine
@@ -146,7 +148,7 @@ export default function Header({ settings }: HeaderProps) {
                 href={lineUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={() => { setMobileMenuOpen(false); GA.clickLine('header_mobile'); }}
                 className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors"
               >
                 <LineIcon className="w-4.5 h-4.5 shrink-0" />

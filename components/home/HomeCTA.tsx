@@ -4,6 +4,7 @@ import { MessageCircle } from 'lucide-react';
 import type { HomePage, SiteSettings } from '@/types';
 import { sanityClient } from '@/lib/sanity';
 import { siteSettingsQuery } from '@/lib/queries';
+import TrackedLink from '@/components/shared/TrackedLink';
 
 interface HomeCTAProps {
   cta?: HomePage['cta'];
@@ -40,10 +41,10 @@ export default async function HomeCTA({ cta }: HomeCTAProps) {
             ดูสินค้าของเรา
           </Link>
           {lineUrl && (
-          <Link href={lineUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all shadow-xl shadow-[#00B900]/20">
+          <TrackedLink href={lineUrl} section="home_cta" eventType="line" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-[#00B900] rounded-full hover:bg-[#00A000] transition-all shadow-xl shadow-[#00B900]/20">
             <MessageCircle className="mr-2 w-5 h-5" />
             คุยกับเราผ่าน LINE
-          </Link>
+          </TrackedLink>
           )}
         </div>
       </div>

@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X, ExternalLink, CreditCard } from 'lucide-react';
 import type { PaymentSettings } from '@/types';
+import { GA } from '@/lib/analytics';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -11,6 +12,9 @@ interface PaymentModalProps {
   paymentSetting: PaymentSettings;
   paymentLink: string;
   paymentLabel?: string;
+  productName?: string;
+  productSlug?: string;
+  paymentType?: 'purchase' | 'booking';
 }
 
 export default function PaymentModal({
@@ -19,6 +23,9 @@ export default function PaymentModal({
   paymentSetting,
   paymentLink,
   paymentLabel = 'ดำเนินการชำระเงิน',
+  productName,
+  productSlug,
+  paymentType,
 }: PaymentModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -133,6 +140,15 @@ export default function PaymentModal({
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-bold text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors active:scale-[0.98] shadow-lg shadow-blue-900/20"
+              onClick={() => {
+                if (productName && paymentType) {
+                  GA.clickPayment(productName, paymentType);
+                }
+                if (productSlug && paymentType) {
+                  localStorage.setItem('dap_last_purchase_slug', productSlug);
+                  localStorage.setItem('dap_last_purchase_type', paymentType);
+                }
+              }}
             >
               <ExternalLink className="w-4.5 h-4.5" />
               {paymentLabel}

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import type { SanityProduct } from '@/types';
 import PaymentModal from './PaymentModal';
+import { GA } from '@/lib/analytics';
 
 interface MobileStickyBarProps {
   product: SanityProduct;
@@ -15,6 +16,7 @@ export default function MobileStickyBar({ product }: MobileStickyBarProps) {
   const bookingPayment = product.paymentOptions?.booking;
 
   const handleOpenPurchase = () => {
+    GA.clickPayment(product.title, 'purchase');
     if (purchasePayment && product.ctaLink) {
       setModalMode('purchase');
     } else if (product.ctaLink) {
@@ -23,6 +25,7 @@ export default function MobileStickyBar({ product }: MobileStickyBarProps) {
   };
 
   const handleOpenBooking = () => {
+    GA.clickPayment(product.title, 'booking');
     if (bookingPayment && product.bookingLink) {
       setModalMode('booking');
     } else if (product.bookingLink) {
@@ -72,6 +75,9 @@ export default function MobileStickyBar({ product }: MobileStickyBarProps) {
           paymentSetting={purchasePayment}
           paymentLink={product.ctaLink}
           paymentLabel="ดำเนินการชำระเงิน"
+          productName={product.title}
+          productSlug={product.slug?.current}
+          paymentType="purchase"
         />
       )}
       {bookingPayment && product.bookingLink && (
@@ -81,6 +87,9 @@ export default function MobileStickyBar({ product }: MobileStickyBarProps) {
           paymentSetting={bookingPayment}
           paymentLink={product.bookingLink}
           paymentLabel="ดำเนินการชำระเงิน"
+          productName={product.title}
+          productSlug={product.slug?.current}
+          paymentType="booking"
         />
       )}
     </>

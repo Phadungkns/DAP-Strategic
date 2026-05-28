@@ -6,6 +6,7 @@ import { CheckCircle2, Users, ShoppingCart, CalendarCheck, ChevronDown, HelpCirc
 import type { SanityProduct } from '@/types';
 import PaymentModal from './PaymentModal';
 import { LinkifyText } from '@/components/shared/LinkifyText';
+import { GA } from '@/lib/analytics';
 
 function formatPrice(price: number): string {
   return price.toLocaleString('th-TH');
@@ -60,6 +61,7 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   const bookingPayment = product.paymentOptions?.booking;
 
   const handleOpenPurchase = () => {
+    GA.clickPayment(product.title, 'purchase');
     if (purchasePayment && product.ctaLink) {
       setModalMode('purchase');
     } else if (product.ctaLink) {
@@ -69,6 +71,7 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   };
 
   const handleOpenBooking = () => {
+    GA.clickPayment(product.title, 'booking');
     if (bookingPayment && product.bookingLink) {
       setModalMode('booking');
     } else if (product.bookingLink) {
@@ -210,6 +213,9 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
           paymentSetting={purchasePayment}
           paymentLink={product.ctaLink}
           paymentLabel="ดำเนินการชำระเงิน"
+          productName={product.title}
+          productSlug={product.slug?.current}
+          paymentType="purchase"
         />
       )}
       {bookingPayment && product.bookingLink && (
@@ -219,6 +225,9 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
           paymentSetting={bookingPayment}
           paymentLink={product.bookingLink}
           paymentLabel="ดำเนินการชำระเงิน"
+          productName={product.title}
+          productSlug={product.slug?.current}
+          paymentType="booking"
         />
       )}
     </>

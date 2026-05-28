@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { X, Maximize2, AlertCircle, MessageCircle } from 'lucide-react';
 import type { ProductHeroSection } from '@/types';
 import { LinkifyText } from '@/components/shared/LinkifyText';
+import { GA } from '@/lib/analytics';
 
 interface DetailHeroSectionProps {
   section: ProductHeroSection;
@@ -108,6 +109,7 @@ export default function DetailHeroSection({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#00B900] hover:bg-[#00a000] text-white font-medium text-lg transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#00B900]/25"
+                onClick={() => GA.clickLine('product_hero')}
               >
                 <MessageCircle className="w-5 h-5" />
                 {lineText}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
 import type { SiteSettings } from '@/types';
+import TrackedLink from '@/components/shared/TrackedLink';
 
 interface ContactInfoProps {
   contact?: SiteSettings['contact'];
@@ -17,7 +18,7 @@ export default function ContactInfo({ contact }: ContactInfoProps) {
       <h3 className="text-xl font-bold text-gray-900 mb-6">ช่องทางการติดต่อ</h3>
       
       <div className="space-y-6">
-        <a href={lineUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
+        <TrackedLink href={lineUrl} section="contact" eventType="line" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
           <div className="w-12 h-12 bg-[#00B900]/10 rounded-full flex items-center justify-center group-hover:bg-[#00B900] transition-colors">
             <MessageCircle className="w-6 h-6 text-[#00B900] group-hover:text-white transition-colors" />
           </div>
@@ -25,7 +26,7 @@ export default function ContactInfo({ contact }: ContactInfoProps) {
             <div className="text-sm text-gray-500 font-medium">LINE Official</div>
             <div className="text-gray-900 font-bold">@DAPStrategic</div>
           </div>
-        </a>
+        </TrackedLink>
         
         <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className="flex items-center gap-4 group">
           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-600 transition-colors">

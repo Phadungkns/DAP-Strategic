@@ -1,0 +1,226 @@
+'use client';
+
+import React, { useEffect, useRef, useState, Suspense } from 'react';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
+import {
+  CheckCircle2,
+  MessageCircle,
+  Home,
+  ShoppingBag,
+  Sparkles,
+  PartyPopper,
+} from 'lucide-react';
+import { GA } from '@/lib/analytics';
+
+/**
+ * หน้า Thank You — ชำระเงินสำเร็จ
+ *
+ * URL: /products/thank-you?source=purchase|booking&product=<slug>
+ *
+ * Payso จะ redirect กลับมาหน้านี้เมื่อชำระสำเร็จ
+ * Fire `purchase` event ให้ GA4 อัตโนมัติ
+ */
+
+// LINE URL ใช้ fallback — ถ้าอยากให้ dynamic ดึงจาก API ได้ภายหลัง
+const LINE_URL = 'https://lin.ee/Gip3vjv';
+
+function ThankYouContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [source, setSource] = useState(searchParams.get('source') || '');
+  const [productSlug, setProductSlug] = useState(searchParams.get('product') || '');
+  const hasFired = useRef(false);
+  const [showConfetti, setShowConfetti] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const [isValidated, setIsValidated] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // ดึงจาก URL หรือ localStorage แล้วยิง purchase event
+  useEffect(() => {
+    let currentSource = source;
+    let currentSlug = productSlug;
+
+    if (!currentSource || !currentSlug) {
+      const storedSlug = localStorage.getItem('dap_last_purchase_slug');
+      const storedType = localStorage.getItem('dap_last_purchase_type');
+
+      if (storedSlug && !currentSlug) {
+        currentSlug = storedSlug;
+        setProductSlug(currentSlug);
+      }
+      if (storedType && !currentSource) {
+        currentSource = storedType;
+        setSource(currentSource);
+      }
+    }
+
+    // ล็อกหน้า: ถ้าไม่มีข้อมูลจากทั้ง URL และ LocalStorage ให้เด้งกลับหน้าแรก
+    if (!currentSource || !currentSlug) {
+      router.replace('/');
+      return;
+    }
+
+    setIsValidated(true);
+
+    if (!hasFired.current) {
+      hasFired.current = true;
+      GA.purchase(currentSource, currentSlug);
+
+      // ลบข้อมูลทิ้ง เพื่อป้องกันการเอา URL มาเข้าซ้ำ หรือ Refresh แล้วนับ GA4 เบิ้ล
+      localStorage.removeItem('dap_last_purchase_slug');
+      localStorage.removeItem('dap_last_purchase_type');
+    }
+  }, [source, productSlug, router]);
+
+  // ซ่อน UI ไว้จนกว่าจะตรวจสอบสิทธิ์ผ่าน
+  if (!isValidated) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center bg-gray-50">
+        <div className="w-8 h-8 border-4 border-blue-900 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // ปิด confetti animation หลัง 4 วินาที
+  useEffect(() => {
+    const timer = setTimeout(() => setShowConfetti(false), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const isBooking = source === 'booking';
+
+  return (
+    <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 overflow-hidden">
+
+      {/* ── Decorative background elements ── */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-green-100/30 via-blue-50/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-100/20 rounded-full blur-3xl pointer-events-none" />
+
+      {/* ── Confetti particles ── */}
+      {mounted && showConfetti && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+          {Array.from({ length: 30 }).map((_, i) => (
+            <div
+              key={i}
+              className="confetti-particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${2 + Math.random() * 2}s`,
+                backgroundColor: [
+                  '#3B82F6', '#10B981', '#F59E0B', '#EF4444',
+                  '#8B5CF6', '#EC4899', '#06B6D4', '#F97316',
+                ][i % 8],
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* ── Main card ── */}
+      <div className="relative z-10 w-full max-w-lg mx-auto px-4 py-16 sm:py-24">
+        <div className="text-center">
+
+          {/* Success icon with pulse */}
+          <div className="relative inline-flex items-center justify-center mb-8">
+            <div className="absolute inset-0 w-24 h-24 rounded-full bg-green-100 animate-ping opacity-20" />
+            <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-xl shadow-green-500/25">
+              <CheckCircle2 className="w-12 h-12 text-white" strokeWidth={2.5} />
+            </div>
+          </div>
+
+          {/* Celebration icon */}
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <PartyPopper className="w-6 h-6 text-amber-500" />
+            <Sparkles className="w-5 h-5 text-blue-500" />
+          </div>
+
+          {/* Heading */}
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+            {isBooking ? 'จองสำเร็จแล้ว!' : 'ชำระเงินสำเร็จ!'}
+          </h1>
+
+          <p className="text-xl text-gray-500 mb-3 leading-relaxed max-w-lg mx-auto">
+            {isBooking
+              ? 'ขอบคุณที่ไว้วางใจจองสินค้ากับเรา'
+              : 'ขอบคุณที่สั่งซื้อสินค้ากับเรา '}
+          </p>
+
+          <p className="text-md text-gray-400 mb-10">
+            สามารถ Add Line เพื่อส่งหลักฐานการชำระเงิน และพูดคุยกับเราได้เลย <br />
+            👇
+          </p>
+
+          {/* ── LINE CTA — ปุ่มหลักเด่น ── */}
+          <a
+            href={LINE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => GA.clickLine('thank_you')}
+            className="group relative inline-flex items-center justify-center gap-3 w-full sm:w-auto px-10 py-4.5 rounded-full bg-[#00B900] hover:bg-[#00a000] text-white font-bold text-lg transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-xl shadow-[#00B900]/25 hover:shadow-[#00B900]/40 mb-5"
+          >
+            <MessageCircle className="w-6 h-6 transition-transform group-hover:scale-110" />
+            <span>Add LINE เพื่อส่งหลักฐานการชำระเงิน</span>
+          </a>
+
+          {/* Sub-text for LINE */}
+          <p className="text-xs text-gray-400 mb-10">
+            เพิ่มเพื่อนเพื่อติดตามสถานะ และรับโปรโมชันพิเศษก่อนใคร
+          </p>
+
+          {/* ── Secondary actions ── */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors w-full sm:w-auto"
+            >
+              <Home className="w-4 h-4" />
+              กลับหน้าแรก
+            </Link>
+            <Link
+              href="/products"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-blue-900 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors w-full sm:w-auto"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              ดูสินค้าเพิ่มเติม
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Confetti CSS ── */}
+      <style jsx>{`
+        @keyframes confetti-fall {
+          0% {
+            transform: translateY(-10vh) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+          }
+        }
+        .confetti-particle {
+          position: absolute;
+          top: -10px;
+          width: 8px;
+          height: 8px;
+          border-radius: 2px;
+          animation: confetti-fall linear forwards;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default function ThankYouPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center bg-gray-50"><div className="w-8 h-8 border-4 border-blue-900 border-t-transparent rounded-full animate-spin"></div></div>}>
+      <ThankYouContent />
+    </Suspense>
+  );
+}
