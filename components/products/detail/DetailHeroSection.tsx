@@ -83,22 +83,24 @@ export default function DetailHeroSection({
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/8 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-slate-600/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-8xl">
 
           {/* Text row */}
-          <div className="pt-8 pb-10 text-center max-w-3xl mx-auto">
+          <div className="pt-8 pb-10 text-center max-w-8xl mx-auto">
             {section.badge && (
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/80 text-sm font-medium mb-6 border border-white/15">
                 <AlertCircle className="w-4 h-4 text-white/60" />
                 {section.badge}
               </div>
             )}
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-[1.15]">
+            <h1 className="font-display text-2xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-[1.15]">
               {section.heading || productTitle}
               {section.highlight && (
                 <>
                   <br />
-                  <span className="text-blue-300">{section.highlight}</span>
+                  <span className="text-blue-300">
+                    <LinkifyText text={section.highlight} />
+                  </span>
                 </>
               )}
             </h1>
