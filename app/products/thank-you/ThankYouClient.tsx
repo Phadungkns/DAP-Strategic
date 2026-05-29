@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   CheckCircle2,
   MessageCircle,
@@ -18,10 +18,7 @@ interface ThankYouClientProps {
 }
 
 function ThankYouContent({ lineUrl }: ThankYouClientProps) {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const [source, setSource] = useState(searchParams.get('source') || '');
-  const [productSlug, setProductSlug] = useState(searchParams.get('product') || '');
   const hasFired = useRef(false);
   const [showConfetti, setShowConfetti] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -31,42 +28,19 @@ function ThankYouContent({ lineUrl }: ThankYouClientProps) {
     setMounted(true);
   }, []);
 
-  // ดึงจาก URL หรือ localStorage แล้วยิง purchase event
   useEffect(() => {
-    let currentSource = source;
-    let currentSlug = productSlug;
-
-    if (!currentSource || !currentSlug) {
-      const storedSlug = localStorage.getItem('dap_last_purchase_slug');
-      const storedType = localStorage.getItem('dap_last_purchase_type');
-
-      if (storedSlug && !currentSlug) {
-        currentSlug = storedSlug;
-        setProductSlug(currentSlug);
-      }
-      if (storedType && !currentSource) {
-        currentSource = storedType;
-        setSource(currentSource);
-      }
-    }
-
-    // ล็อกหน้า: ถ้าไม่มีข้อมูลจากทั้ง URL และ LocalStorage ให้เด้งกลับหน้าแรก
-    if (!currentSource || !currentSlug) {
-      router.replace('/');
-      return;
-    }
-
     setIsValidated(true);
 
     if (!hasFired.current) {
       hasFired.current = true;
-      GA.purchase(currentSource, currentSlug);
+      // เก็บสถิติเข้า GA4 แบบรวมๆ (ไม่แยกสินค้า ไม่แยกจอง/ซื้อ)
+      GA.purchase('success', 'general-transaction');
 
-      // ลบข้อมูลทิ้ง เพื่อป้องกันการเอา URL มาเข้าซ้ำ หรือ Refresh แล้วนับ GA4 เบิ้ล
+      // ลบข้อมูลทิ้ง
       localStorage.removeItem('dap_last_purchase_slug');
       localStorage.removeItem('dap_last_purchase_type');
     }
-  }, [source, productSlug, router]);
+  }, []);
 
   // ปิด confetti animation หลัง 4 วินาที
   useEffect(() => {
@@ -82,8 +56,6 @@ function ThankYouContent({ lineUrl }: ThankYouClientProps) {
       </div>
     );
   }
-
-  const isBooking = source === 'booking';
 
   return (
     <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 overflow-hidden">
@@ -131,15 +103,13 @@ function ThankYouContent({ lineUrl }: ThankYouClientProps) {
             <Sparkles className="w-5 h-5 text-blue-500" />
           </div>
 
-          {/* Heading */}
+          {/* Heading (Generic) */}
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-            {isBooking ? 'จองสำเร็จแล้ว!' : 'ชำระเงินสำเร็จ!'}
+            ทำรายการสำเร็จ!
           </h1>
 
           <p className="text-xl text-gray-500 mb-3 leading-relaxed max-w-lg mx-auto">
-            {isBooking
-              ? 'ขอบคุณที่ไว้วางใจจองสินค้ากับเรา'
-              : 'ขอบคุณที่สั่งซื้อสินค้ากับเรา '}
+            ขอบคุณที่ไว้วางใจซื้อสินค้ากับเรา
           </p>
 
           <p className="text-md text-gray-400 mb-10">
