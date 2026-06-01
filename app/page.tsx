@@ -11,6 +11,8 @@ import { homePageQuery, servicesQuery, portfolioQuery } from '@/lib/queries';
 import { generatePageMetadata } from '@/lib/seo';
 import type { HomePage, SanityService, SanityPortfolio } from '@/types';
 
+export const revalidate = 30;
+
 // ── SEO: Dynamic metadata from Sanity ──
 export async function generateMetadata(): Promise<Metadata> {
   let data: HomePage | null = null;
