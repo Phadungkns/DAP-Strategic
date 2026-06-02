@@ -24,10 +24,10 @@ export default function HeroSection({ hero }: HeroSectionProps) {
           {badge}
         </div>
         <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gray-900 mb-8 leading-[1.1]">
-          {heading}<br className="hidden md:block" />
+          {heading}<br />
           <span className="text-blue-900">{highlight}</span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed whitespace-pre-wrap">
           {description}
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
