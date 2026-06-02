@@ -19,9 +19,15 @@ export default function HeroSection({ hero }: HeroSectionProps) {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-50/90"></div>
       
       <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/50 text-blue-900 text-sm font-medium mb-8 border border-blue-200">
-          <span className="flex h-2 w-2 rounded-full bg-blue-600"></span>
-          {badge}
+        <div className="inline-flex items-center gap-2 px-4 py-2 md:px-3 md:py-1 rounded-3xl md:rounded-full bg-blue-100/50 text-blue-900 text-sm font-medium mb-8 border border-blue-200 max-w-full">
+          <span className="flex h-2 w-2 rounded-full bg-blue-600 shrink-0"></span>
+          <span className="text-center">
+            {badge.split('/').map((part, index) => (
+              <span key={index} className="block md:inline">
+                {index > 0 ? ` / ${part.trim()}` : part.trim()}
+              </span>
+            ))}
+          </span>
         </div>
         <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gray-900 mb-8 leading-[1.1]">
           {heading}<br />
