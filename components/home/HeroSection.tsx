@@ -25,7 +25,7 @@ export default function HeroSection({ hero }: HeroSectionProps) {
         </div>
         <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gray-900 mb-8 leading-[1.1]">
           {heading}<br />
-          <span className="text-blue-900">{highlight}</span>
+          <span className="inline-block mt-3 md:mt-0 text-blue-900">{highlight}</span>
         </h1>
         <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed whitespace-pre-wrap">
           {description}
