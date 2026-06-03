@@ -82,7 +82,7 @@ export interface SiteSettings {
 /* ── Home Page Types (Sanity) ── */
 export interface HomePage {
   hero?: {
-    badge?: string;
+    badge?: string[];
     heading?: string;
     highlight?: string;
     description?: string;
