@@ -7,6 +7,7 @@ export default function LeadForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [selectedService, setSelectedService] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,9 +17,7 @@ export default function LeadForm() {
     const formData = new FormData(e.currentTarget);
     const data = {
       name: formData.get('name'),
-      phone: formData.get('phone'),
       email: formData.get('email'),
-      company: formData.get('company'),
       service: formData.get('service'),
       message: formData.get('message'),
     };
@@ -71,42 +70,40 @@ export default function LeadForm() {
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium text-gray-700">ชื่อ - นามสกุล *</label>
-            <input type="text" id="name" name="name" required className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" placeholder="John Doe" />
+            <label htmlFor="name" className="text-sm font-medium text-gray-700">ชื่อของคุณ</label>
+            <input type="text" id="name" name="name" required className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" placeholder="DongFunda" />
           </div>
-          <div className="space-y-2">
-            <label htmlFor="phone" className="text-sm font-medium text-gray-700">เบอร์โทรศัพท์ *</label>
-            <input type="tel" id="phone" name="phone" required className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" placeholder="08X-XXX-XXXX" />
-          </div>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium text-gray-700">อีเมล</label>
-            <input type="email" id="email" name="email" className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" placeholder="john@company.com" />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="company" className="text-sm font-medium text-gray-700">ชื่อบริษัท / ธุรกิจ</label>
-            <input type="text" id="company" name="company" className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" placeholder="Company Name Co., Ltd." />
+            <input type="email" id="email" name="email" className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" placeholder="DongFunda@company.com" />
           </div>
         </div>
 
         <div className="space-y-2">
           <label htmlFor="service" className="text-sm font-medium text-gray-700">บริการที่สนใจ *</label>
-          <select id="service" name="service" required className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-white">
-            <option value="">-- กรุณาเลือกบริการ --</option>
-            <option value="strategy">Strategic Planner / Business Strategy</option>
+          <select 
+            id="service" 
+            name="service" 
+            required 
+            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-white"
+            value={selectedService}
+            onChange={(e) => setSelectedService(e.target.value)}
+          >
+            <option value="">-- กรุณาเลือกบริการที่คุณสนใจ --</option>
+            <option value="course">คอร์สเรียน</option>
             <option value="feasibility">Feasibility Study</option>
             <option value="business-plan">Business Plan</option>
-            <option value="course">คอร์สเรียน / E-Book</option>
-            <option value="other">อื่นๆ (ปรึกษาทั่วไป)</option>
+            <option value="strategy">Strategic Planner</option>
+            <option value="other">อื่นๆ ปรึกษาทั่วไป</option>
           </select>
         </div>
 
-        <div className="space-y-2">
-          <label htmlFor="message" className="text-sm font-medium text-gray-700">รายละเอียดเบื้องต้น / ปัญหาที่พบ</label>
-          <textarea id="message" name="message" rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all resize-none" placeholder="เล่าปัญหาหรือเป้าหมายที่คุณต้องการให้เราช่วย..."></textarea>
-        </div>
+        {selectedService === 'other' && (
+          <div className="space-y-2">
+            <label htmlFor="message" className="text-sm font-medium text-gray-700">รายละเอียดที่ต้องการปรึกษา *</label>
+            <textarea id="message" name="message" required rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all resize-none" placeholder="โปรดระบุเรื่องที่ต้องการปรึกษา..."></textarea>
+          </div>
+        )}
 
         <button 
           type="submit" 
