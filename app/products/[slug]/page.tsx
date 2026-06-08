@@ -100,10 +100,51 @@ export default async function ProductDetailPage({
   ) as ProductSocialProofSection[];
 
   const primaryHero = product.hero || null;
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://dapstrategic.com';
+
+  // JSON-LD for Product
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.seo?.description || product.subtitle || product.description,
+    image: product.imageUrl,
+    offers: {
+      '@type': 'Offer',
+      price: product.salePrice || product.originalPrice || 0,
+      priceCurrency: 'THB',
+      availability: 'https://schema.org/InStock',
+      url: `${SITE_URL}/products/${slug}`
+    }
+  };
+
+  // JSON-LD for FAQs
+  const faqJsonLd = product.faqs && product.faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: product.faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    }))
+  } : null;
 
   return (
     // พื้นหลังหลักเป็น white ตลอด — แต่ละ section จัดการ bg เองตาม rhythm
     <div className="bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       {/* ── Breadcrumb strip (ต่อจาก Header ซึ่งเป็น dark) ── */}
       <div className="bg-gray-950">

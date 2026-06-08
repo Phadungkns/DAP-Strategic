@@ -7,11 +7,9 @@ export const servicesQuery = `
     title,
     slug,
     subtitle,
-    shortDescription,
     problem,
     solution,
     deliverables,
-    pricing,
     order
   }
 `;
@@ -58,14 +56,12 @@ export const serviceBySlugQuery = `
       }
     },
     subtitle,
-    shortDescription,
     description,
     problem,
     solution,
     deliverables,
     suitableFor,
     faqs,
-    pricing,
     isActive,
     seo
   }

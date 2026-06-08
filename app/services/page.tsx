@@ -76,7 +76,6 @@ export default async function ServicesPage() {
                       problem: service.problem ?? '',
                       solution: service.solution ?? '',
                       deliverables: service.deliverables ?? [],
-                      pricing: service.pricing ?? '',
                     }}
                   />
                 ))

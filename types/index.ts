@@ -8,7 +8,6 @@ export interface ServiceItem {
   problem: string;
   solution: string;
   deliverables: string[];
-  pricing: string;
   slug?: string;
 }
 
@@ -17,11 +16,9 @@ export interface SanityService {
   _id: string;
   title: string;
   subtitle?: string;
-  shortDescription?: string;
   problem?: string;
   solution?: string;
   deliverables?: string[];
-  pricing?: string;
   order?: number;
   slug?: { current: string };
   category?: { title: string; slug?: { current: string } };

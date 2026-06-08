@@ -11,8 +11,7 @@ export const services: ServiceItem[] = [
       "แผนกลยุทธ์องค์กร (Corporate Strategy)",
       "แผนภาพโมเดลธุรกิจ (Business Model Canvas)",
       "แผนปฏิบัติการ (Action Plan) พร้อม OKRs/KPIs"
-    ],
-    pricing: "150,000"
+    ]
   },
   {
     id: "feasibility-study",
@@ -24,8 +23,7 @@ export const services: ServiceItem[] = [
       "รายงานการศึกษาความเป็นไปได้ (Feasibility Study Report)",
       "โมเดลทางการเงิน (Financial Model - Excel)",
       "บทสรุปผู้บริหาร (Executive Summary)"
-    ],
-    pricing: "120,000"
+    ]
   },
   {
     id: "business-plan",
@@ -37,7 +35,6 @@ export const services: ServiceItem[] = [
       "แผนธุรกิจฉบับสมบูรณ์ (Comprehensive Business Plan)",
       "Pitch Deck สำหรับนำเสนอนักลงทุน",
       "แผนภาพคาดการณ์ทางการเงิน (Financial Projections)"
-    ],
-    pricing: "100,000"
+    ]
   }
 ];

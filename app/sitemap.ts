@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '@/lib/sanity';
-import { productSlugsQuery } from '@/lib/queries';
+import { productSlugsQuery, serviceSlugsQuery } from '@/lib/queries';
 
 // ──────────────────────────────────────────────
 // Sitemap — ช่วยให้ Google ค้นหาทุกหน้าได้ครบ
@@ -44,6 +44,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // Dynamic service detail pages
+  let servicePages: MetadataRoute.Sitemap = [];
+  try {
+    const slugs = await sanityClient.fetch<Array<{ slug: string }>>(serviceSlugsQuery);
+    servicePages = slugs
+      .filter((s) => s.slug)
+      .map((s) => ({
+        url: `${SITE_URL}/services/${s.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      }));
+  } catch {
+    // silently fail
+  }
+
   // Dynamic product detail pages
   let productPages: MetadataRoute.Sitemap = [];
   try {
@@ -57,8 +73,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       }));
   } catch {
-    // silently fail — static pages still generated
+    // silently fail
   }
 
-  return [...staticPages, ...productPages];
+  return [...staticPages, ...servicePages, ...productPages];
 }

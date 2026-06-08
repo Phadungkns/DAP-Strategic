@@ -58,8 +58,8 @@ export async function generateMetadata({
     title: service.seo?.title || `${service.title} | DAP Strategic Consulting`,
     description:
       service.seo?.description ||
-      service.shortDescription ||
-      service.subtitle,
+      service.subtitle ||
+      '',
     path: `/services/${slug}`,
   });
 }
@@ -97,9 +97,48 @@ export default async function ServiceDetailPage({
   ) as ProductSocialProofSection[];
 
   const primaryHero = service.hero || null;
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://dapstrategic.com';
+
+  // JSON-LD for Service
+  const serviceJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: service.title,
+    description: service.seo?.description || service.subtitle || service.description,
+    provider: {
+      '@type': 'Organization',
+      name: 'DAP Strategic Consulting'
+    },
+    url: `${SITE_URL}/services/${slug}`,
+  };
+
+  // JSON-LD for FAQs
+  const faqJsonLd = service.faqs && service.faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: service.faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    }))
+  } : null;
 
   return (
     <div className="bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+
       {/* ── Breadcrumb strip ── */}
       <div className="bg-gray-950">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl pt-6">
