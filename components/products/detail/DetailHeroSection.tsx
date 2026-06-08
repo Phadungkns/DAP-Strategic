@@ -13,6 +13,7 @@ interface DetailHeroSectionProps {
   productImageUrl?: string;
   categoryTitle?: string;
   lineUrl?: string;
+  lineText?: string;
 }
 
 function getEmbedUrls(url: string): { inline: string; fullscreen: string } | null {
@@ -53,15 +54,20 @@ export default function DetailHeroSection({
   productImageUrl,
   categoryTitle,
   lineUrl,
+  lineText,
 }: DetailHeroSectionProps) {
   const [showVideo, setShowVideo] = useState(true);
 
-  let lineText = 'ทัก Line เพื่อสอบถามคอร์ส';
+  let defaultLineText = 'ทัก Line เพื่อสอบถามคอร์ส';
   if (categoryTitle?.toLowerCase().includes('ebook') || categoryTitle?.toLowerCase().includes('e-book')) {
-    lineText = 'ทักไลน์เพื่อสอบถาม E-Book';
+    defaultLineText = 'ทักไลน์เพื่อสอบถาม E-Book';
   } else if (categoryTitle?.toLowerCase().includes('template')) {
-    lineText = 'ทักไลน์เพื่อสอบถาม Template';
+    defaultLineText = 'ทักไลน์เพื่อสอบถาม Template';
+  } else if (categoryTitle?.toLowerCase().includes('บริการ') || categoryTitle?.toLowerCase().includes('service')) {
+    defaultLineText = 'ทัก Line เพื่อสอบถามบริการ';
   }
+  
+  const displayLineText = lineText || defaultLineText;
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasVideo = !!section.videoPreview;
@@ -114,7 +120,7 @@ export default function DetailHeroSection({
                 onClick={() => GA.clickLine('product_hero')}
               >
                 <MessageCircle className="w-5 h-5" />
-                {lineText}
+                {displayLineText}
               </a>
             </div>
 

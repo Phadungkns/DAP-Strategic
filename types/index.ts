@@ -9,6 +9,7 @@ export interface ServiceItem {
   solution: string;
   deliverables: string[];
   pricing: string;
+  slug?: string;
 }
 
 /* ── Sanity Service Type ── */
@@ -22,6 +23,18 @@ export interface SanityService {
   deliverables?: string[];
   pricing?: string;
   order?: number;
+  slug?: { current: string };
+  category?: { title: string; slug?: { current: string } };
+  hero?: ProductHeroSection;
+  sections?: ProductSection[];
+  description?: string;
+  suitableFor?: string[];
+  faqs?: { question: string; answer: string }[];
+  isActive?: boolean;
+  seo?: {
+    title?: string;
+    description?: string;
+  };
 }
 
 /* ── Portfolio Types ── */

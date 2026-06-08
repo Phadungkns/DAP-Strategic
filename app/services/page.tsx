@@ -4,11 +4,11 @@ import PageHeader from '@/components/shared/PageHeader';
 import ServiceCard from '@/components/services/ServiceCard';
 import ServicesCTA from '@/components/services/ServicesCTA';
 import { sanityClient } from '@/lib/sanity';
-import { servicesQuery, servicesPageQuery } from '@/lib/queries';
+import { servicesQuery, servicesPageQuery, siteSettingsQuery } from '@/lib/queries';
 import { services as fallbackServices } from '@/data/services';
 import { slugify } from '@/lib/utils';
 import { generatePageMetadata } from '@/lib/seo';
-import type { SanityService, ServicesPageContent } from '@/types';
+import type { SanityService, ServicesPageContent, SiteSettings } from '@/types';
 
 export const revalidate = 30;
 
@@ -34,15 +34,18 @@ export default async function ServicesPage() {
   // ดึงข้อมูลจาก Sanity
   let sanityServices: SanityService[] = [];
   let pageData: ServicesPageContent | null = null;
+  let siteSettings: SiteSettings | null = null;
   try {
-    const [fetchedServices, fetchedPageData] = await Promise.all([
+    const [fetchedServices, fetchedPageData, fetchedSiteSettings] = await Promise.all([
       sanityClient.fetch(servicesQuery),
-      sanityClient.fetch(servicesPageQuery)
+      sanityClient.fetch(servicesPageQuery),
+      sanityClient.fetch(siteSettingsQuery),
     ]);
     sanityServices = fetchedServices;
     pageData = fetchedPageData;
+    siteSettings = fetchedSiteSettings;
   } catch (error) {
-    console.error('Failed to fetch services from Sanity:', error);
+    console.error('Failed to fetch data from Sanity:', error);
   }
 
   // ถ้า Sanity มีข้อมูล → ใช้ Sanity, ถ้าไม่มี → fallback hardcoded
@@ -64,8 +67,10 @@ export default async function ServicesPage() {
               ? sanityServices.map((service) => (
                   <ServiceCard
                     key={service._id}
+                    lineUrl={siteSettings?.contact?.lineUrl}
                     service={{
                       id: slugify(service.title),
+                      slug: service.slug ? service.slug.current : '',
                       title: service.title,
                       subtitle: service.subtitle ?? '',
                       problem: service.problem ?? '',
@@ -76,7 +81,7 @@ export default async function ServicesPage() {
                   />
                 ))
               : fallbackServices.map((service) => (
-                  <ServiceCard key={service.id} service={service} />
+                  <ServiceCard key={service.id} service={service} lineUrl={siteSettings?.contact?.lineUrl} />
                 ))}
           </div>
         </div>

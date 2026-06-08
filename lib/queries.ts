@@ -5,6 +5,7 @@ export const servicesQuery = `
   *[_type == "service" && isActive == true] | order(order asc) {
     _id,
     title,
+    slug,
     subtitle,
     shortDescription,
     problem,
@@ -13,6 +14,66 @@ export const servicesQuery = `
     pricing,
     order
   }
+`;
+
+// ดึงข้อมูล service ตาม slug (หน้ารายละเอียด)
+export const serviceBySlugQuery = `
+  *[_type == "service" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    "category": category->{ title, slug },
+    hero {
+      badge,
+      heading,
+      highlight,
+      subheading,
+      painPoints[] {
+        text
+      },
+      videoPreview,
+      "thumbnailUrl": thumbnail.asset->url
+    },
+    sections[] {
+      _type,
+      _type == "solutionSection" => {
+        heading,
+        description
+      },
+      _type == "benefitSection" => {
+        benefits[] {
+          title,
+          description
+        }
+      },
+      _type == "storySection" => {
+        heading,
+        content,
+        "imageUrl": image.asset->url
+      },
+      _type == "socialProofSection" => {
+        title,
+        description,
+        "socialImages": socialImages[]{ "url": asset->url }
+      }
+    },
+    subtitle,
+    shortDescription,
+    description,
+    problem,
+    solution,
+    deliverables,
+    suitableFor,
+    faqs,
+    pricing,
+    isActive,
+    seo
+  }
+`;
+
+// ดึง slug ทั้งหมดสำหรับ generateStaticParams สำหรับ service
+export const serviceSlugsQuery = `
+  *[_type == "service" && isActive == true] { "slug": slug.current }
 `;
 
 // ดึงข้อมูล portfolio ที่ isActive = true เรียงตาม order

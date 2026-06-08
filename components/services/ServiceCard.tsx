@@ -1,14 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import { AlertCircle, Lightbulb, Package, Tag, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, Lightbulb, Package, Tag, ArrowRight, CheckCircle2, MessageCircle } from 'lucide-react';
 import { slugify } from '@/lib/utils';
 import type { ServiceItem } from '@/types';
 
 interface ServiceCardProps {
   service: ServiceItem;
+  lineUrl?: string;
 }
 
-export default function ServiceCard({ service }: ServiceCardProps) {
+export default function ServiceCard({ service, lineUrl }: ServiceCardProps) {
   return (
     <div id={slugify(service.title)} className="bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 transition-shadow duration-300 scroll-mt-24">
       {/* Service Header */}
@@ -59,18 +60,18 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           </div>
 
           <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 mt-auto">
-            <div className="flex items-center gap-2 mb-2 text-gray-500 text-sm font-medium">
-              <Tag className="w-4 h-4" />
-              <span>ค่าบริการ (Pricing)</span>
-            </div>
-            <div className="flex items-baseline gap-2 mb-6">
-              <span className="text-gray-500">เริ่มต้นที่</span>
-              <span className="font-display text-4xl font-bold text-gray-900">{service.pricing}</span>
-              <span className="text-gray-500">บาท</span>
-            </div>
+            <a
+              href={lineUrl || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center px-6 py-3.5 text-base font-medium text-white bg-[#00B900] rounded-xl hover:bg-[#00a000] transition-colors shadow-sm mb-3"
+            >
+              <MessageCircle className="w-5 h-5 mr-2" />
+              สอบถามราคาทาง LINE
+            </a>
             
-            <Link href="/contact" className="w-full inline-flex items-center justify-center px-6 py-3.5 text-base font-medium text-white bg-blue-900 rounded-xl hover:bg-blue-800 transition-colors shadow-sm">
-              นัดคุยกับผู้เชี่ยวชาญ
+            <Link href={service.slug ? `/services/${service.slug}` : `/contact`} className="w-full inline-flex items-center justify-center px-6 py-3.5 text-base font-medium text-white bg-blue-900 rounded-xl hover:bg-blue-800 transition-colors shadow-sm">
+              รายละเอียดเพิ่มเติม
               <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
           </div>
