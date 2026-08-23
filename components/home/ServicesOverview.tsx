@@ -63,7 +63,7 @@ export default function ServicesOverview({ services }: ServicesOverviewProps) {
                     <Icon className="w-10 h-10 text-blue-400 mb-6" />
                     <h3 className="text-xl font-bold mb-4">{service.title}</h3>
                     <p className="text-gray-400 leading-relaxed mb-8">
-                      {service.shortDescription ?? service.subtitle ?? ''}
+                      {service.description ?? service.subtitle ?? ''}
                     </p>
                     <Link
                       href={`/services#${slugify(service.title)}`}
