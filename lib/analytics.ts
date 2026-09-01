@@ -1,7 +1,7 @@
 // lib/analytics.ts
 // ──────────────────────────────────────────────────────────
-// Centralized GA4 event tracking utilities.
-// Uses `window.gtag()` injected by @next/third-parties/google.
+// Centralized GA4 and Meta event tracking utilities.
+// GTM loads the provider tags that expose `window.gtag()` and `window.fbq()`.
 // ──────────────────────────────────────────────────────────
 
 /**
