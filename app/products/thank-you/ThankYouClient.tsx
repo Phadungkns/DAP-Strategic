@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {
   CheckCircle2,
   MessageCircle,
@@ -18,44 +17,13 @@ interface ThankYouClientProps {
 }
 
 function ThankYouContent({ lineUrl }: ThankYouClientProps) {
-  const router = useRouter();
-  const hasFired = useRef(false);
   const [showConfetti, setShowConfetti] = useState(true);
-  const [mounted, setMounted] = useState(false);
-  const [isValidated, setIsValidated] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    setIsValidated(true);
-
-    if (!hasFired.current) {
-      hasFired.current = true;
-      // เก็บสถิติเข้า GA4 แบบรวมๆ (ไม่แยกสินค้า ไม่แยกจอง/ซื้อ)
-      GA.purchase('success', 'general-transaction');
-
-      // ลบข้อมูลทิ้ง
-      localStorage.removeItem('dap_last_purchase_slug');
-      localStorage.removeItem('dap_last_purchase_type');
-    }
-  }, []);
 
   // ปิด confetti animation หลัง 4 วินาที
   useEffect(() => {
     const timer = setTimeout(() => setShowConfetti(false), 4000);
     return () => clearTimeout(timer);
   }, []);
-
-  // ซ่อน UI ไว้จนกว่าจะตรวจสอบสิทธิ์ผ่าน
-  if (!isValidated) {
-    return (
-      <div className="min-h-[80vh] flex items-center justify-center bg-gray-50">
-        <div className="w-8 h-8 border-4 border-blue-900 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 overflow-hidden">
@@ -65,16 +33,16 @@ function ThankYouContent({ lineUrl }: ThankYouClientProps) {
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-100/20 rounded-full blur-3xl pointer-events-none" />
 
       {/* ── Confetti particles ── */}
-      {mounted && showConfetti && (
+      {showConfetti && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
           {Array.from({ length: 30 }).map((_, i) => (
             <div
               key={i}
               className="confetti-particle"
               style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
+                left: `${(i * 37) % 100}%`,
+                animationDelay: `${(i % 10) * 0.2}s`,
+                animationDuration: `${2 + (i % 5) * 0.35}s`,
                 backgroundColor: [
                   '#3B82F6', '#10B981', '#F59E0B', '#EF4444',
                   '#8B5CF6', '#EC4899', '#06B6D4', '#F97316',

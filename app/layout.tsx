@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import JsonLd from '@/components/shared/JsonLd';
 import ScrollTracker from '@/components/shared/ScrollTracker';
+import MetaPixel from '@/components/shared/MetaPixel';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { generatePageMetadata } from '@/lib/seo';
 import { sanityClient } from '@/lib/sanity';
@@ -33,6 +34,12 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const rawGaId = process.env.NEXT_PUBLIC_GA_ID?.trim();
+  const gaId = rawGaId
+    ? rawGaId.startsWith('G-') ? rawGaId : `G-${rawGaId}`
+    : null;
+  const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim();
+
   let settings: SiteSettings | null = null;
   try {
     settings = await sanityClient.fetch<SiteSettings>(siteSettingsQuery);
@@ -52,7 +59,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Footer />
         </div>
         <ScrollTracker />
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID as string} />
+        {gaId && <GoogleAnalytics gaId={gaId} />}
+        {metaPixelId && <MetaPixel pixelId={metaPixelId} />}
       </body>
     </html>
   );
