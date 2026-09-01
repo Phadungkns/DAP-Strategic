@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { CheckCircle2, Users, ShoppingCart, CalendarCheck, ChevronDown, HelpCircle } from 'lucide-react';
 import type { SanityProduct } from '@/types';
@@ -53,6 +53,8 @@ interface ProductDetailInfoProps {
 }
 
 export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
+  const hasTrackedView = useRef(false);
+  const productId = product.slug?.current || product.title;
   const hasDiscount = product.originalPrice && product.originalPrice > product.salePrice;
 
   const [modalMode, setModalMode] = useState<'purchase' | 'booking' | null>(null);
@@ -60,21 +62,27 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   const purchasePayment = product.paymentOptions?.purchase;
   const bookingPayment = product.paymentOptions?.booking;
 
+  useEffect(() => {
+    if (hasTrackedView.current) return;
+    hasTrackedView.current = true;
+    GA.viewProduct(product.title, productId, product.salePrice);
+  }, [product.salePrice, productId, product.title]);
+
   const handleOpenPurchase = () => {
-    GA.clickPayment(product.title, 'purchase');
     if (purchasePayment && product.ctaLink) {
       setModalMode('purchase');
     } else if (product.ctaLink) {
       // ถ้าไม่มี payment steps ให้ลิงก์ตรงไปเลย
+      GA.clickPayment(product.title, 'purchase', product.salePrice);
       window.open(product.ctaLink, '_blank', 'noopener,noreferrer');
     }
   };
 
   const handleOpenBooking = () => {
-    GA.clickPayment(product.title, 'booking');
     if (bookingPayment && product.bookingLink) {
       setModalMode('booking');
     } else if (product.bookingLink) {
+      GA.clickPayment(product.title, 'booking', product.bookingPrice);
       window.open(product.bookingLink, '_blank', 'noopener,noreferrer');
     }
   };
@@ -216,6 +224,7 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
           productName={product.title}
           productSlug={product.slug?.current}
           paymentType="purchase"
+          paymentValue={product.salePrice}
         />
       )}
       {bookingPayment && product.bookingLink && (
@@ -228,6 +237,7 @@ export default function ProductDetailInfo({ product }: ProductDetailInfoProps) {
           productName={product.title}
           productSlug={product.slug?.current}
           paymentType="booking"
+          paymentValue={product.bookingPrice}
         />
       )}
     </>

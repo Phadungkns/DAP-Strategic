@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Send, CheckCircle, Loader2 } from 'lucide-react';
+import { GA } from '@/lib/analytics';
 
 export default function LeadForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +31,8 @@ export default function LeadForm() {
       });
 
       if (!res.ok) throw new Error('เกิดข้อผิดพลาดในการส่งข้อมูล');
-      
+
+      GA.submitLead(String(data.service || 'general'));
       setIsSuccess(true);
     } catch (error: any) {
       setErrorMsg(error.message || 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');

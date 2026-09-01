@@ -15,6 +15,7 @@ interface PaymentModalProps {
   productName?: string;
   productSlug?: string;
   paymentType?: 'purchase' | 'booking';
+  paymentValue?: number;
 }
 
 export default function PaymentModal({
@@ -26,6 +27,7 @@ export default function PaymentModal({
   productName,
   productSlug,
   paymentType,
+  paymentValue,
 }: PaymentModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -142,7 +144,7 @@ export default function PaymentModal({
               className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-bold text-white bg-blue-900 rounded-full hover:bg-blue-800 transition-colors active:scale-[0.98] shadow-lg shadow-blue-900/20"
               onClick={() => {
                 if (productName && paymentType) {
-                  GA.clickPayment(productName, paymentType);
+                  GA.clickPayment(productName, paymentType, paymentValue);
                 }
                 if (productSlug && paymentType) {
                   localStorage.setItem('dap_last_purchase_slug', productSlug);

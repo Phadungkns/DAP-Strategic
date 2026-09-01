@@ -7,12 +7,29 @@
 /**
  * ส่ง custom event ไป GA4 ผ่าน gtag
  */
+type AnalyticsValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | Record<string, unknown>[]
+  | undefined;
+
 export function trackEvent(
   eventName: string,
-  params?: Record<string, string | number | undefined>,
+  params?: Record<string, AnalyticsValue>,
 ) {
   if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
     window.gtag('event', eventName, params);
+  }
+}
+
+export function trackMetaEvent(
+  eventName: string,
+  params?: Record<string, AnalyticsValue>,
+) {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+    window.fbq('track', eventName, params);
   }
 }
 
@@ -38,6 +55,22 @@ const PAYMENT_LABELS: Record<string, string> = {
  * Predefined GA4 event helpers — เรียกใช้ง่ายจากทุก component
  */
 export const GA = {
+  /** คนเปิดดูหน้าสินค้า */
+  viewProduct: (productName: string, productId: string, value: number) => {
+    trackEvent('view_item', {
+      currency: 'THB',
+      value,
+      items: [{ item_id: productId, item_name: productName, price: value }],
+    });
+    trackMetaEvent('ViewContent', {
+      content_name: productName,
+      content_ids: [productId],
+      content_type: 'product',
+      value,
+      currency: 'THB',
+    });
+  },
+
   /** คนกดปุ่ม LINE (Add Line) */
   clickLine: (section: string) => {
     const readableSection = SECTION_LABELS[section] || section;
@@ -46,6 +79,9 @@ export const GA = {
       section_id: section,          // เผื่อโปรแกรมเมอร์ดู
       section_name: readableSection, // ชื่อไทยสำหรับลูกค้า
       event_label: `แอดไลน์จาก: ${readableSection}`, // ให้แสดงชัดๆ ในรายงาน
+    });
+    trackMetaEvent('Contact', {
+      content_name: readableSection,
     });
   },
 
@@ -58,10 +94,28 @@ export const GA = {
       section_name: readableSection,
       event_label: `กดสมัครจาก: ${readableSection}`,
     });
+    trackMetaEvent('CompleteRegistration', {
+      content_name: readableSection,
+    });
+  },
+
+  /** คนส่งแบบฟอร์มให้ติดต่อกลับสำเร็จ */
+  submitLead: (service: string) => {
+    trackEvent('generate_lead', {
+      service,
+      event_label: `ส่งฟอร์มติดต่อสำเร็จ: ${service}`,
+    });
+    trackMetaEvent('Lead', {
+      content_name: service,
+    });
   },
 
   /** คนกดปุ่มชำระเงิน (สั่งซื้อ / จอง) */
-  clickPayment: (productName: string, paymentType: 'purchase' | 'booking') => {
+  clickPayment: (
+    productName: string,
+    paymentType: 'purchase' | 'booking',
+    value?: number,
+  ) => {
     const readableType = PAYMENT_LABELS[paymentType] || paymentType;
     trackEvent('click_payment', {
       page: typeof window !== 'undefined' ? window.location.pathname : '',
@@ -69,18 +123,42 @@ export const GA = {
       payment_type: readableType,
       event_label: `กด${readableType}: ${productName}`,
     });
+    trackEvent('begin_checkout', {
+      currency: 'THB',
+      value,
+      items: [{ item_name: productName, price: value }],
+    });
+    trackMetaEvent('InitiateCheckout', {
+      content_name: productName,
+      content_type: 'product',
+      value,
+      currency: 'THB',
+    });
   },
 
-  /** คนซื้อสำเร็จ — fire เมื่อเข้าหน้า Thank You */
-  purchase: (source: string, productSlug: string) => {
+  /** ใช้เฉพาะหลังระบบชำระเงินยืนยันธุรกรรมแล้ว */
+  purchase: (
+    source: string,
+    productSlug: string,
+    value: number,
+    transactionId: string,
+  ) => {
     const readableSource = PAYMENT_LABELS[source] || source;
     trackEvent('purchase', {
       page: typeof window !== 'undefined' ? window.location.pathname : '',
       source_type: readableSource,
       product_id: productSlug,
       event_label: `${readableSource} สำเร็จ: ${productSlug}`,
-      value: 1, // สามารถใส่ราคาสินค้าได้ถ้าต้องการในอนาคต
-      currency: 'THB'
+      transaction_id: transactionId,
+      value,
+      currency: 'THB',
+      items: [{ item_id: productSlug, price: value }],
+    });
+    trackMetaEvent('Purchase', {
+      content_ids: [productSlug],
+      content_type: 'product',
+      value,
+      currency: 'THB',
     });
   },
 
