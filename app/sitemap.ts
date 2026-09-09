@@ -1,6 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { sanityClient } from '@/lib/sanity';
 import { productSlugsQuery, serviceSlugsQuery } from '@/lib/queries';
+import { getPublishedContent } from '@/lib/dongfunda/data';
+import { contentHref } from '@/lib/dongfunda/model';
+import { dongfundaSite } from '@/lib/dongfunda/seo';
 
 // ──────────────────────────────────────────────
 // Sitemap — ช่วยให้ Google ค้นหาทุกหน้าได้ครบ
@@ -76,5 +79,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // silently fail
   }
 
-  return [...staticPages, ...servicePages, ...productPages];
+  const content = await getPublishedContent();
+  const contentPages: MetadataRoute.Sitemap = content.map(item => ({
+    url: `${dongfundaSite}${contentHref(item)}`,
+    lastModified: item.updated_at || item.published_at,
+    changeFrequency: 'weekly', priority: 0.7,
+  }));
+  return [...staticPages, ...servicePages, ...productPages,
+    {url: `${dongfundaSite}/dongfunda`, changeFrequency: 'weekly', priority: 0.8}, ...contentPages];
 }

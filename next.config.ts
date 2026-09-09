@@ -1,6 +1,8 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
+  // Keep the owner's existing local build separate from this review server.
+  distDir: process.env.DONGFUNDA_LOCAL_REVIEW === 'true' ? '.next-dongfunda-review' : '.next',
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,

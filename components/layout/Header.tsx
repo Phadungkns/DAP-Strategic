@@ -16,8 +16,9 @@ const LineIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 const navItems = [
   { href: '/', label: 'Home' },
-  { href: '/services', label: 'Services' },
+  { href: '/dongfunda', label: 'DongFunda' },
   { href: '/products', label: 'Products' },
+  { href: '/services', label: 'Services' },
   { href: '/contact', label: 'About / Contact' },
 ];
 
@@ -27,15 +28,13 @@ interface HeaderProps {
 
 export default function Header({ settings }: HeaderProps) {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  if (openPath !== null && openPath !== pathname) setOpenPath(null);
+  const mobileMenuOpen = openPath === pathname;
+  const setMobileMenuOpen = (open: boolean) => setOpenPath(open ? pathname : null);
 
   const lineUrl = settings?.contact?.lineUrl || 'https://line.me';
   const youtubeUrl = settings?.socialLinks?.find((link) => link.platform === 'youtube')?.url || 'https://youtube.com';
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -66,13 +65,13 @@ export default function Header({ settings }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6" aria-label="Main navigation">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={`text-sm font-medium transition-colors ${
-                pathname === item.href
+                pathname === item.href || (item.href === '/dongfunda' && pathname.startsWith('/dongfunda/'))
                   ? 'text-blue-900'
                   : 'text-gray-600 hover:text-blue-900'
               }`}
@@ -89,7 +88,7 @@ export default function Header({ settings }: HeaderProps) {
               href={lineUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs md:text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 shadow-sm hover:shadow transition-all"
+              className="hidden lg:inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs md:text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 shadow-sm hover:shadow transition-all"
               onClick={() => GA.clickLine('header')}
             >
               <LineIcon className="w-4 h-4 shrink-0" />
@@ -101,7 +100,7 @@ export default function Header({ settings }: HeaderProps) {
               href={youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs md:text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 shadow-sm hover:shadow transition-all"
+              className="hidden lg:inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs md:text-sm font-semibold text-white bg-blue-900 rounded-full hover:bg-blue-800 shadow-sm hover:shadow transition-all"
             >
               <Youtube className="w-4 h-4 shrink-0" />
               YouTube
@@ -109,7 +108,7 @@ export default function Header({ settings }: HeaderProps) {
           )}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+            className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
             aria-label={mobileMenuOpen ? 'ปิดเมนู' : 'เปิดเมนู'}
             aria-expanded={mobileMenuOpen}
           >
@@ -120,7 +119,8 @@ export default function Header({ settings }: HeaderProps) {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+        inert={!mobileMenuOpen}
+        className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >

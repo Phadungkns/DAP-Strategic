@@ -1,7 +1,11 @@
 node_modules/
 .next/
+.next-dongfunda-review/
 coverage/
 .DS_Store
 *.log
 .env*
 !.env.example
+*.tsbuildinfo
+review/dongfunda/*.png
+review/dongfunda/*.json
